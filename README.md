@@ -9,4 +9,6 @@ Features:
 - Read/write .env, json file
 - Read/write assignment operation in several programming languages
 - Configuration Interface
+    - Generate from muiltiple source (.env, json, source code)
+    - Auto update on changes from other Jupyter cell
 - Process Control Interface (WIP)

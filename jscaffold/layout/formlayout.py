@@ -1,6 +1,6 @@
 from typing import List
-from ipylivebash.exp.scaffold.processor import Processor
-from ipylivebash.exp.scaffold.services.changedispatcher import (
+from jscaffold.processor import Processor
+from jscaffold.services.changedispatcher import (
     Listener,
     change_dispatcher,
 )

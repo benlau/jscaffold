@@ -1,4 +1,3 @@
-from ipylivebash.sessionmanager import run_script  # noqa
 from .utils import inspect_arg_name
 from .format import Format
 

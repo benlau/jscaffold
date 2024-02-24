@@ -1,5 +1,5 @@
-from ipylivebash.exp.scaffold.iounit.iounit import IOUnit
-from ipylivebash.exp.scaffold.processor import Processor
+from jscaffold.iounit.iounit import IOUnit
+from jscaffold.processor import Processor
 from unittest.mock import MagicMock, patch
 import asyncio
 
@@ -33,11 +33,12 @@ def test_processor_create_task():
     done.assert_called_once()
 
 
-@patch("ipylivebash.exp.scaffold.services.changedispatcher.change_dispatcher.dispatch")
+@patch("jscaffold.services.changedispatcher.change_dispatcher.dispatch")
 def test_processor_should_dispatch_change(mock_dispatch):
     iounit = IOUnit()
     iounit.get_id = MagicMock(return_value="test")
     iounit.write = MagicMock()
+    iounit._write = MagicMock()
 
     processor = Processor()
     processor("input", iounit, "value")

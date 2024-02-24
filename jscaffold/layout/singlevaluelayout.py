@@ -1,4 +1,4 @@
-from ipylivebash.exp.scaffold.services.changedispatcher import (
+from jscaffold.services.changedispatcher import (
     change_dispatcher,
     Listener,
 )

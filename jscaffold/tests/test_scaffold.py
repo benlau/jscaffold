@@ -1,8 +1,8 @@
 from unittest.mock import Mock
-from ipylivebash.exp.scaffold.envvar import EnvVar
-from ipylivebash.exp.scaffold.layout.formlayout import ApplyToSource
-from ipylivebash.exp.scaffold.scaffold import Scaffold, Block
-from ipylivebash.exp.scaffold.context import Context
+from jscaffold.iounit.envvar import EnvVar
+from jscaffold.layout.formlayout import ApplyToSource
+from jscaffold.scaffold import Scaffold, Block
+from jscaffold.context import Context
 
 
 def test_scaffold_form_layout():

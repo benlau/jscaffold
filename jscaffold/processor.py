@@ -1,8 +1,8 @@
-from ipylivebash.exp.scaffold.iounit.iounit import InputUnit
+from .iounit.iounit import InputUnit
 from ipylivebash.sessionmanager import run_script
 import asyncio
 from inspect import signature
-from ipylivebash.exp.scaffold.services.changedispatcher import change_dispatcher
+from jscaffold.services.changedispatcher import change_dispatcher
 
 
 class Processor:

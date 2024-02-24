@@ -1,4 +1,4 @@
-from ipylivebash.exp.scaffold.utils import inspect_arg_name
+from jscaffold.utils import inspect_arg_name
 
 
 def test_inspect_arg_name_by_kwarg():

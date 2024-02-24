@@ -1,5 +1,5 @@
-from ipylivebash.exp.scaffold.doublebufferoutput import DoubleBufferOutput
-from ipylivebash.exp.scaffold.decorators import preset_iot_class_method
+from jscaffold.doublebufferoutput import DoubleBufferOutput
+from jscaffold.decorators import preset_iot_class_method
 from .interfacebuilder import InterfaceBuilder
 from .columnflow import ColumnFlow
 from .context import Context

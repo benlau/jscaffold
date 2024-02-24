@@ -1,4 +1,4 @@
-from ipylivebash.exp.scaffold.doublebufferoutput import DoubleBufferOutput
+from jscaffold.doublebufferoutput import DoubleBufferOutput
 from ipywidgets import widgets
 from IPython.display import display
 import uuid

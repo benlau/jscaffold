@@ -20,27 +20,27 @@ class WidgetFactory:
     def create_link_button(self, description):
         style = """
         <style>
-        .ipylivebash-link-button {
+        .jsacffold-link-button {
             background: transparent;
             color: #1976d2;
             width: auto;
         }
 
-        .ipylivebash-link-button:hover {
+        .jsacffold-link-button:hover {
             background: transparent;
             border: none;
             box-shadow: none ! important;
             opacity: 0.5;
         }
 
-        .ipylivebash-link-button:active {
+        .jsacffold-link-button:active {
             background: transparent;
             border: none;
             box-shadow: none ! important;
             opacity: 0.7;
         }
 
-        .ipylivebash-link-button:focus {
+        .jsacffold-link-button:focus {
             border: none;
             box-shadow: none ! important;
             outline: none ! important;
@@ -50,7 +50,7 @@ class WidgetFactory:
         style_html = widgets.HTML(style)
 
         button = widgets.Button(description=description)
-        button.add_class("ipylivebash-link-button")
+        button.add_class("jscaffold-link-button")
         container = widgets.Box([button, style_html])
 
         return WidgetWrapper(

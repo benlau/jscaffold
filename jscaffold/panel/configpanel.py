@@ -1,10 +1,10 @@
-from ipylivebash.exp.scaffold.doublebufferoutput import DoubleBufferOutput
+from jscaffold.doublebufferoutput import DoubleBufferOutput
 from ..context import Context
-from ipylivebash.exp.scaffold.layout.singlevaluelayout import SingleValueLayout
-from ipylivebash.exp.scaffold.layout.formlayout import FormLayout
-from ipylivebash.exp.scaffold.decorators import preset_iot_class_method
+from jscaffold.layout.singlevaluelayout import SingleValueLayout
+from jscaffold.layout.formlayout import FormLayout
+from jscaffold.decorators import preset_iot_class_method
 from IPython.display import display
-from ipylivebash.exp.scaffold.views.logger import Logger
+from jscaffold.views.logger import Logger
 from ipywidgets import widgets
 
 

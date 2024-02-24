@@ -1,6 +1,6 @@
 from jscaffold.patchers.assign import PatchAssignment
 from .scaffoldvar import ScaffoldVar
-from .decorators import preset_format
+from ..decorators import preset_format
 
 
 class EnvFileVar(ScaffoldVar):
@@ -14,7 +14,7 @@ class EnvFileVar(ScaffoldVar):
     def get_id(self):
         return f"EnvFile:{self.filename}:{self.key}"
 
-    def write(self, value, context=None):
+    def _write(self, value, context=None):
         content = self._read_file_content()
         replaced, _ = self.patcher(
             content if content is not None else "", self.key, value
@@ -27,7 +27,7 @@ class EnvFileVar(ScaffoldVar):
         if context is not None and context.print_line is not None:
             context.print_line(f"Set {self.key}={value} to {self.filename}\n")
 
-    def read(self, context=None):
+    def _read(self, context=None):
         content = self._read_file_content()
         if content is None:
             return None

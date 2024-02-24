@@ -1,6 +1,6 @@
 from jscaffold.patchers.dict import PatchDict
 from .scaffoldvar import ScaffoldVar
-from .decorators import preset_format
+from ..decorators import preset_format
 from collections import OrderedDict
 import json
 
@@ -17,7 +17,7 @@ class JsonFileVar(ScaffoldVar):
     def get_id(self):
         return f"JsonFile:{self.filename}:{self.key}"
 
-    def write(self, value, context=None):
+    def _write(self, value, context=None):
         content = self._read_json_from_file()
         if content is None:
             content = {}
@@ -29,7 +29,7 @@ class JsonFileVar(ScaffoldVar):
         if context is not None and context.print_line is not None:
             context.print_line(f"Set {self.key}={value} to {self.filename}\n")
 
-    def read(self, context=None):
+    def _read(self, context=None):
         content = self._read_json_from_file()
         if content is None:
             return None

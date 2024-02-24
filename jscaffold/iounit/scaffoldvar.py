@@ -1,4 +1,4 @@
-from .iounit.iounit import IOUnit
+from .iounit import IOUnit
 
 
 class ScaffoldVar(IOUnit):

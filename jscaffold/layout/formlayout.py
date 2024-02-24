@@ -6,7 +6,7 @@ from ipylivebash.exp.scaffold.services.changedispatcher import (
 )
 import ipywidgets as widgets
 from IPython.display import display
-from ..scaffoldvar import ScaffoldVar
+from jscaffold.iounit.scaffoldvar import ScaffoldVar
 from ..doublebufferoutput import DoubleBufferOutput
 from ..widgetfactory import WidgetFactory
 from ..iounit.iounit import InputUnit, OutputUnit

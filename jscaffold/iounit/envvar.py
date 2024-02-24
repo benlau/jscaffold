@@ -1,7 +1,7 @@
 import os
 from .scaffoldvar import ScaffoldVar
-from .context import Context
-from .decorators import preset_format
+from ..context import Context
+from ..decorators import preset_format
 
 
 class EnvVar(ScaffoldVar):
@@ -17,11 +17,11 @@ class EnvVar(ScaffoldVar):
     def get_id(self):
         return f"Env:{self.key}"
 
-    def write(self, value=None, context: Context = None):
+    def _write(self, value=None, context: Context = None):
         validaed_value = self.validate(value, self.defaults)
         os.environ[self.key] = validaed_value
         if context is not None and context.print_line is not None:
             context.print_line(f"Set {self.key}={value}\n")
 
-    def read(self, context: Context = None):
+    def _read(self, context: Context = None):
         return os.getenv(self.key)

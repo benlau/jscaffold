@@ -1,4 +1,4 @@
-from jscaffold.envfilevar import EnvFileVar
+from jscaffold import EnvFileVar
 from tempfile import NamedTemporaryFile
 
 

@@ -30,7 +30,10 @@ class InputUnit(ABC):
             ret = _normalize_defaults(self.defaults)
         return ret if ret is not None else ""
 
-    def read(self, context: Context = None) -> Optional[str]:
+    def read(self, context: Context = None):
+        return self._read(context=context)
+
+    def _read(self, context: Context = None) -> Optional[str]:
         """
         Read raw value. If the value is not set, return None
         """
@@ -42,9 +45,12 @@ class InputUnit(ABC):
 
 class OutputUnit(ABC):
     def __call__(self, value=None, context: Context = None):
-        self.write(value, context=context)
+        return self._write(value, context=context)
 
     def write(self, value=None, context: Context = None):
+        return self._write(value, context=context)
+
+    def _write(self, value=None, context: Context = None):
         raise NotImplementedError()
 
 

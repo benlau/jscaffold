@@ -1,4 +1,4 @@
-from jscaffold.envvar import EnvVar
+from jscaffold.iounit.envvar import EnvVar
 import os
 
 

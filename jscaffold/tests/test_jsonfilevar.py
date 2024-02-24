@@ -1,4 +1,4 @@
-from jscaffold.jsonfilevar import JsonFileVar
+from jscaffold.iounit.jsonfilevar import JsonFileVar
 from tempfile import NamedTemporaryFile
 import json
 import textwrap

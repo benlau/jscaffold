@@ -26,9 +26,6 @@ class ApplyToSource(OutputUnit):
         for index, value in enumerate(values):
             source = sources[index]
             source.write(value, context)
-            if isinstance(source, InputUnit):
-                object_id = source.get_id()
-                change_dispatcher.dispatch(object_id, value)
 
 
 # FormLayout is a class that creates a layout for a form.

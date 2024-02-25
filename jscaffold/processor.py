@@ -40,10 +40,6 @@ class Processor:
                 args = [value, self.context][:arg_count]
                 target(*args)
 
-                if isinstance(target, InputUnit):
-                    object_id = target.get_id()
-                    change_dispatcher.dispatch(object_id, value)
-
     def create_task(self, input, output, value):
         async def run():
             return self.process(input, output, value)

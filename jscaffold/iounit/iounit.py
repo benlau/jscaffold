@@ -1,7 +1,8 @@
-from typing import Callable, Optional, List, Union
+from typing import Optional, List, Union
 from abc import ABC
 from dataclasses import dataclass
 from ..context import Context
+from jscaffold.services.changedispatcher import change_dispatcher
 
 
 def _normalize_defaults(defaults):
@@ -45,9 +46,13 @@ class InputUnit(ABC):
 
 class OutputUnit(ABC):
     def __call__(self, value=None, context: Context = None):
-        return self._write(value, context=context)
+        return self.write(value, context=context)
 
     def write(self, value=None, context: Context = None):
+        if isinstance(self, InputUnit):
+            object_id = self.get_id()
+            change_dispatcher.dispatch(object_id, value)
+
         return self._write(value, context=context)
 
     def _write(self, value=None, context: Context = None):

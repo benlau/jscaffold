@@ -1,5 +1,6 @@
 from jscaffold.iounit.envvar import EnvVar
 import os
+from unittest.mock import MagicMock, patch
 
 
 def test_envvar_get_id():
@@ -28,3 +29,11 @@ def test_if_none_write_defaults():
     var.if_none_write_default()
 
     assert os.getenv(name) == "default"
+
+
+@patch("jscaffold.services.changedispatcher.change_dispatcher.dispatch")
+def test_envvar_write_should_dispatch_change(mock_dispatch):
+    var = EnvVar("VAR")
+    var.write("value")
+
+    mock_dispatch.assert_called_once_with("Env:VAR", "value")

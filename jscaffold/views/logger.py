@@ -41,7 +41,6 @@ class Logger:
         js = f"""
             var range = document.createRange();
             var elm = document.getElementById('{normalized_id}');
-            console.log(elm);
             range.selectNode(elm);
             window.getSelection().removeAllRanges();
             window.getSelection().addRange(range);

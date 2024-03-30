@@ -14,3 +14,11 @@ class ScaffoldVar(IOUnit):
             return defaults[0]
 
         return None
+
+    @property
+    def value(self):
+        return self.read()
+
+    @value.setter
+    def value(self, value):
+        self.write(value)

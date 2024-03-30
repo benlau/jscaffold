@@ -5,7 +5,7 @@ from ..decorators import preset_format
 
 class EnvFileVar(ScaffoldVar):
     @preset_format
-    def __init__(self, filename, key, defaults=None):
+    def __init__(self, key, filename, defaults=None):
         self.filename = filename
         self.key = key
         self.patcher = PatchAssignment()

@@ -13,19 +13,19 @@ def write_to_tmp(dict):
 
 
 def test_jsonfilevar_get_id():
-    variable = JsonFileVar("./config.json", "A")
+    variable = JsonFileVar("A", "./config.json")
     assert variable.get_id() == "JsonFile:./config.json:A"
 
 
 def test_jsonfilevar_read_from_file():
     source = write_to_tmp({"A": {"B": {"C": "value"}}})
-    variable = JsonFileVar(source, "A.B.C")
+    variable = JsonFileVar("A.B.C", source)
     assert variable.read() == "value"
 
 
 def test_jsonfilevar_write_to_file():
     source = write_to_tmp({"A": {"B": {"C": "value"}}})
-    variable = JsonFileVar(source, "A.B.C", indent=4)
+    variable = JsonFileVar("A.B.C", source, indent=4)
     variable.write("new_value")
 
     with open(source, "r") as file:

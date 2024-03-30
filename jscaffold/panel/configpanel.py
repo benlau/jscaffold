@@ -1,4 +1,3 @@
-from jscaffold.doublebufferoutput import DoubleBufferOutput
 from ..context import Context
 from jscaffold.layout.singlevaluelayout import SingleValueLayout
 from jscaffold.layout.formlayout import FormLayout
@@ -70,10 +69,14 @@ class ConfigPanel:
         self.focus()
         self.is_setup_completed = True
 
+    def __repr__(self):
+        return ""
+
     def show(self):
         if not self.is_setup_completed:
             self.setup()
         display(self.widget)
+        return self
 
     def focus(self):
         if self.layout is not None:

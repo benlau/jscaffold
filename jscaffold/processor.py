@@ -29,7 +29,7 @@ class Processor:
                 script = target
                 # TODO Handle list type
                 env = {
-                    "LB_VALUE": value,
+                    "JS_VALUE": value,
                 }
                 task = run_script(script, print_line=self.context.print_line, env=env)
                 asyncio.get_event_loop().create_task(task)

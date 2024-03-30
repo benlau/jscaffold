@@ -6,6 +6,7 @@ from jscaffold.services.changedispatcher import change_dispatcher
 
 
 def _normalize_defaults(defaults):
+    ret = None
     if isinstance(defaults, str):
         ret = defaults
     elif isinstance(defaults, list):

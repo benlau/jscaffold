@@ -3,7 +3,7 @@ from tempfile import NamedTemporaryFile
 
 
 def test_envfilevar_get_id():
-    variable = EnvFileVar("./config.env", "A")
+    variable = EnvFileVar("A", "./config.env")
     assert variable.get_id() == "EnvFile:./config.env:A"
 
 
@@ -18,7 +18,7 @@ def test_envfile_var_write_not_existed_file():
     filename = tmp_file.name
     tmp_file.close()
 
-    var = EnvFileVar(filename, "A")
+    var = EnvFileVar("A", filename)
     var.write("value")
 
     file = open(tmp_file.name, "r")

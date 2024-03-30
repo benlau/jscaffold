@@ -7,7 +7,7 @@ import json
 
 class JsonFileVar(ScaffoldVar):
     @preset_format
-    def __init__(self, filename, key, defaults=None, indent=None):
+    def __init__(self, key, filename, defaults=None, indent=None):
         self.filename = filename
         self.key = key
         self.patcher = PatchDict()

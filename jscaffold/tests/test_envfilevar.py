@@ -9,7 +9,7 @@ def test_envfilevar_get_id():
 
 def test_envfile_var_read_not_existed_file():
     var = EnvFileVar("not_existed_file", "var", "default")
-    assert var.read() == None
+    assert var.read() is None
     assert var.to_string() == "default"
 
 

@@ -30,7 +30,7 @@ def test_inspect_arg_name_not_found():
     A = 1
     D = 4
     res = func(A, "b", D)
-    assert res == None
+    assert res is None
 
 
 def test_inspect_arg_name_not_varible():
@@ -39,7 +39,7 @@ def test_inspect_arg_name_not_varible():
 
     D = 4
     res = func("1===2", "b", D)
-    assert res == None
+    assert res is None
 
 
 def test_inspect_arg_name_can_not_accpt_func():
@@ -51,4 +51,4 @@ def test_inspect_arg_name_can_not_accpt_func():
 
     D = 4
     res = func(func2(), "b", D)
-    assert res == None
+    assert res is None

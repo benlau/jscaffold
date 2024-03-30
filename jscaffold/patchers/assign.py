@@ -1,7 +1,6 @@
 from enum import Enum
 import re
 from typing import Pattern, Optional, Tuple
-import json
 
 # Reference
 # https://github.com/theskumar/python-dotenv/blob/main/src/dotenv/parser.py

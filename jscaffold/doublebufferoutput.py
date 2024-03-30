@@ -3,7 +3,8 @@ import ipywidgets as widgets
 
 class DoubleBufferOutput:
     """
-    An alternative to ipywidgets.Output that uses a double buffer to avoid unable to clear output bug.
+    An alternative to ipywidgets.Output that uses a double
+    buffer to avoid unable to clear output bug.
 
     https://stackoverflow.com/questions/58380894/ipywidgets-clear-output-does-not-work-the-second-time-its-used
     """

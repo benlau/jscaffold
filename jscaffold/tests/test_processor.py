@@ -1,4 +1,3 @@
-from jscaffold.iounit.iounit import IOUnit
 from jscaffold.processor import Processor
 from unittest.mock import MagicMock
 import asyncio

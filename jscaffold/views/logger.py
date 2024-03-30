@@ -1,4 +1,3 @@
-from jscaffold.doublebufferoutput import DoubleBufferOutput
 from ipywidgets import widgets
 from IPython.display import display
 import uuid
@@ -68,7 +67,7 @@ class Logger:
         top: 0px;
         border: 1px solid #bfbfbf;
         display: block;
-        border: 1px solid #bfbfbf; 
+        border: 1px solid #bfbfbf;
         padding: 2px 4px;
         user-select: none;
     }};

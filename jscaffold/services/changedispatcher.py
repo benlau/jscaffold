@@ -1,6 +1,3 @@
-import weakref
-
-
 class ChangeDispatcher:
     def __init__(self):
         # It can't use WeakSet because it will be removed in Jupyter environment
@@ -13,7 +10,7 @@ class ChangeDispatcher:
         for listener in self.listeners:
             try:
                 listener(type, payload)
-            except Exception as e:
+            except Exception:
                 self.listeners.remove(listener)
 
 

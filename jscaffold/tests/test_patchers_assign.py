@@ -12,7 +12,7 @@ def test_assignment_patch_extract_original_value():
     patcher = PatchAssignment()
     _, original_value = patcher(source, "b")
 
-    assert original_value == None
+    assert original_value is None
 
     _, original_value = patcher(source, "a")
 
@@ -224,7 +224,7 @@ def test_assignment_patch_pod_spec():
         spec.source_files = 'Reachability.{h,m}'
         spec.framework    = 'SystemConfiguration'
         end
-        """
+        """  # noqa
     )
 
     expected = textwrap.dedent(
@@ -240,7 +240,7 @@ def test_assignment_patch_pod_spec():
         spec.source_files = 'Reachability.{h,m}'
         spec.framework    = 'SystemConfiguration'
         end
-        """
+        """  # noqa
     )
 
     patcher = PatchAssignment()

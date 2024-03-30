@@ -1,6 +1,5 @@
-from typing import Optional, List, Union
+from typing import Optional
 from abc import ABC
-from dataclasses import dataclass
 from ..context import Context
 from jscaffold.services.changedispatcher import change_dispatcher
 

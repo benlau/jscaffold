@@ -17,6 +17,10 @@ clean:
 try-publish:
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
+.PHONY: lint
+lint:
+	pylama jscaffold
+
 .PHONY: lint-fix
 lint-fix:
 	black jscaffold

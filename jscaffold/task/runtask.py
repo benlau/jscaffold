@@ -13,6 +13,7 @@ class RunTask:
         self.script = ""
         self.threads = []
 
+    # pylama:ignore=C901
     def __call__(self, print_line=print, flush=None, env=None):
         mutex = threading.Lock()
         pending_messages = []

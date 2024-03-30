@@ -33,6 +33,7 @@ class SingleValueLayout:
     def focus(self):
         self.input_widget.focus()
 
+    # pylama:ignore=C901
     def _create_ipywidget(self):
         layout = []
         factory = WidgetFactory()
@@ -70,7 +71,7 @@ class SingleValueLayout:
             )
             task.add_done_callback(lambda _: enable())
 
-        if self.instant_write == False:
+        if self.instant_write is False:
             (submit_area, confirm_button) = factory.create_submit_area(
                 self.output, on_submit=on_submit, default_label=self.action_label
             )

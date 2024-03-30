@@ -5,11 +5,10 @@ from jscaffold.services.changedispatcher import (
     change_dispatcher,
 )
 import ipywidgets as widgets
-from IPython.display import display
 from jscaffold.iounit.scaffoldvar import ScaffoldVar
 from ..doublebufferoutput import DoubleBufferOutput
 from ..widgetfactory import WidgetFactory
-from ..iounit.iounit import InputUnit, OutputUnit
+from ..iounit.iounit import OutputUnit
 
 
 class ApplyToSource(OutputUnit):
@@ -56,6 +55,7 @@ class FormLayout:
         self.confirm_button = None
         self.widget = self._create_ipywidget()
 
+    # pylama:ignore=C901
     def _create_ipywidget(self):
         factory = WidgetFactory()
         output_widget = DoubleBufferOutput()

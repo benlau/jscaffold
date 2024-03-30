@@ -1,6 +1,6 @@
 from jscaffold.iounit.envvar import EnvVar
 import os
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 
 def test_envvar_get_id():

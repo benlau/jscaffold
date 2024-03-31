@@ -19,7 +19,7 @@ class Logger:
         self.html = html
 
     def append_stdout(self, message):
-        self.content = self.content + "\n" + message
+        self.content = self.content + message
         self.refresh()
 
     def clear_output(self):

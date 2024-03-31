@@ -7,10 +7,12 @@ from ipywidgets import widgets
 from ..widgetfactory import WidgetFactory
 from ..processor import Processor
 
-# SingleValueLayout is a class that creates a layout for a single input value.
-
 
 class SingleValueLayout:
+    """
+    SingleValueLayout is a internal class that creates a layout for a single input value.
+    """
+
     @preset_iot_class_method
     def __init__(
         self,
@@ -31,21 +33,14 @@ class SingleValueLayout:
         self.is_running = False
 
     def focus(self):
-        self.input_widget.focus()
+        if self.input_widget is not None:
+            self.input_widget.focus()
 
     # pylama:ignore=C901
     def _create_ipywidget(self):
         layout = []
         factory = WidgetFactory()
-
-        title_widget = None
-        if self.title is not None:
-            # TODO: Update title style
-            title_widget = widgets.Label(value=self.title)
-            layout.append(title_widget)
-
-        input_widget = factory.create_input(self.input)
-        self.input_widget = input_widget
+        self.input_widget = None
 
         def on_change(value):
             try:
@@ -55,9 +50,6 @@ class SingleValueLayout:
                 self.context.print_line(str(e))
                 raise e
 
-        listener = Listener(self.input.get_id(), on_change)
-        change_dispatcher.add_listener(listener)
-
         def on_submit():
             def enable():
                 if self.confirm_button is not None:
@@ -66,10 +58,31 @@ class SingleValueLayout:
             processor = Processor(self.context)
             if self.confirm_button is not None:
                 self.confirm_button.disabled = True
-            task = processor.create_task(
-                self.input, self.output, input_widget.get_value()
+            current_input_value = (
+                self.input_widget.get_value() if self.input is not None else None
             )
+            task = processor.create_task(self.input, self.output, current_input_value)
             task.add_done_callback(lambda _: enable())
+
+        title_widget = None
+        if self.title is not None:
+            # TODO: Update title style
+            title_widget = widgets.Label(value=self.title)
+            layout.append(title_widget)
+
+        if self.input is None:
+            (submit_area, confirm_button) = factory.create_submit_area(
+                self.output, on_submit=on_submit, default_label=self.action_label
+            )
+            self.confirm_button = confirm_button
+            widgets_box = widgets.VBox(layout + [submit_area])
+            return widgets_box
+
+        input_widget = factory.create_input(self.input)
+        self.input_widget = input_widget
+
+        listener = Listener(self.input.get_id(), on_change)
+        change_dispatcher.add_listener(listener)
 
         if self.instant_write is False:
             (submit_area, confirm_button) = factory.create_submit_area(

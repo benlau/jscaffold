@@ -1,7 +1,12 @@
+from typing import List, Optional, Union
 from .iounit import IOUnit
+from .format import Format
 
 
 class ScaffoldVar(IOUnit):
+    def __init__(self):
+        self.format = Format()
+
     def validate(self, value=None, defaults=None):
         if value is not None:
             return value
@@ -22,3 +27,14 @@ class ScaffoldVar(IOUnit):
     @value.setter
     def value(self, value):
         self.write(value)
+
+    def multiline(self, multiline: Optional[Union[bool, int]] = True):
+        self.format.multiline = multiline
+        return self
+
+    def select(
+        self,
+        *args: Optional[List[str]],
+    ):
+        self.format.select = list(args)
+        return self

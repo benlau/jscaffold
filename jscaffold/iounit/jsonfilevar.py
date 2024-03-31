@@ -1,13 +1,12 @@
 from jscaffold.patchers.dict import PatchDict
 from .scaffoldvar import ScaffoldVar
-from ..decorators import preset_format
 from collections import OrderedDict
 import json
 
 
 class JsonFileVar(ScaffoldVar):
-    @preset_format
     def __init__(self, key, filename, defaults=None, indent=None):
+        super().__init__()
         self.filename = filename
         self.key = key
         self.patcher = PatchDict()

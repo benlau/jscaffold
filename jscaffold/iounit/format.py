@@ -4,13 +4,13 @@ from typing import List, Optional, Union
 
 class FormatType(Enum):
     Text = "text"
-    File = "file"
+    TmpFile = "tmp_file"
 
 
 class Format:
     def __init__(
         self,
-        type=FormatType.Text,
+        type=FormatType.Text.value,
         multiline: Optional[Union[bool, int]] = False,
         select: Optional[List[str]] = None,
     ):

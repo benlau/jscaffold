@@ -1,7 +1,6 @@
 import os
 from .scaffoldvar import ScaffoldVar
 from ..context import Context
-from ..decorators import preset_format
 
 
 class EnvVar(ScaffoldVar):
@@ -9,8 +8,8 @@ class EnvVar(ScaffoldVar):
     Wrapper for environment variable
     """
 
-    @preset_format
     def __init__(self, key, defaults=""):
+        super().__init__()
         self.key = key
         self.defaults = defaults
 

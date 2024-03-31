@@ -7,4 +7,4 @@ def test_no_input():
     """
 
     script = "ls"
-    ConfigPanel(output=script).show()
+    ConfigPanel(output=script).setup()

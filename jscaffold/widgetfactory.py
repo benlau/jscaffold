@@ -84,6 +84,9 @@ class WidgetFactory:
             input_widget = widgets.Text(value=value, layout=layout)
 
         def set_value(value):
+            if is_select:
+                if value not in format.select:
+                    value = None
             input_widget.value = value
 
         return WidgetWrapper(

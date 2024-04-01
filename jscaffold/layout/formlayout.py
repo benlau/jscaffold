@@ -7,7 +7,7 @@ from jscaffold.services.changedispatcher import (
 import ipywidgets as widgets
 from jscaffold.iounit.scaffoldvar import ScaffoldVar
 from ..doublebufferoutput import DoubleBufferOutput
-from ..widgetfactory import WidgetFactory
+from ..widgets.widgetfactory import WidgetFactory
 from ..iounit.iounit import OutputUnit
 
 
@@ -76,8 +76,8 @@ class FormLayout:
         def create_listener(id, widget):
             def on_change(value):
                 try:
-                    if widget.get_value() != value:
-                        widget.set_value(value)
+                    if widget.value != value:
+                        widget.value = value
                 except Exception as e:
                     self.context.print_line(str(e))
                     raise e
@@ -93,7 +93,7 @@ class FormLayout:
 
             input_widget = factory.create_input(input)
             grid[i, 0] = label
-            grid[i, 1] = input_widget.container
+            grid[i, 1] = input_widget.widget
             self.input_widgets.append(input_widget)
             listener = create_listener(input.get_id(), input_widget)
             change_dispatcher.add_listener(listener)
@@ -105,7 +105,7 @@ class FormLayout:
 
             values = []
             for i, _ in enumerate(self.input):
-                values.append(self.input_widgets[i].get_value())
+                values.append(self.input_widgets[i].value)
 
             if self.confirm_button is not None:
                 self.confirm_button.disabled = True

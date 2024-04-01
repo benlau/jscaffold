@@ -1,6 +1,6 @@
 from typing import List, Optional, Union
 from .iounit import IOUnit
-from .format import Format
+from .format import FileSource, FormatType, Format
 
 
 class ScaffoldVar(IOUnit):
@@ -37,4 +37,10 @@ class ScaffoldVar(IOUnit):
         *args: Optional[List[str]],
     ):
         self.format.select = list(args)
+        return self
+
+    def upload_file(self, folder: str = None):
+        self.format.type = FormatType.File.value
+        self.format.file_source = FileSource.Upload.value
+        self.format.upload_folder = folder
         return self

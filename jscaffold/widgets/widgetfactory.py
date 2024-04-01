@@ -1,16 +1,38 @@
 from ipywidgets import widgets
-from .iounit.iounit import InputUnit
+from jscaffold.iounit.format import FileSource, Format, FormatType
+from jscaffold.widgets.inputwidget import (
+    SelectInputWidget,
+    FileUploadInputWidget,
+    TextAreaInputWidget,
+    TextInputWidget,
+)
+from ..iounit.iounit import InputUnit
+from enum import Enum
+
+
+class InputWidgetType(Enum):
+    Text = "text"
+    Select = "select"
+    Textarea = "textarea"
+    FileUpload = "file_upload"
 
 
 class WidgetWrapper:
     def __init__(
-        self, widget, container, get_value=None, on_click=None, set_value=None
+        self,
+        widget,
+        container,
+        get_value=None,
+        on_click=None,
+        set_value=None,
+        type=None,
     ):
         self.widget = widget
         self.container = container
         self.get_value = get_value
         self.set_value = set_value
         self.on_click = on_click
+        self.type = type
 
     def focus(self):
         self.widget.focus()
@@ -57,44 +79,32 @@ class WidgetFactory:
             button, container, on_click=lambda callback: button.on_click(callback)
         )
 
+    def get_input_widget_type(self, input: InputUnit, format: Format):
+        if (
+            format.type == FormatType.File.value
+            and format.file_source == FileSource.Upload.value
+        ):
+            return InputWidgetType.FileUpload
+        if input is not None and isinstance(format.select, list):
+            return InputWidgetType.Select
+        if format.multiline is True or (
+            isinstance(format.multiline, int) and format.multiline > 1
+        ):
+            return InputWidgetType.Textarea
+        return InputWidgetType.Text
+
     def create_input(self, input: InputUnit):
-        value = str(input) if input is not None else None
-
         format = input.format
+        input_widget_type = self.get_input_widget_type(input, format)
 
-        is_select = input is not None and isinstance(format.select, list)
-
-        is_textarea = not is_select and (
-            format.multiline is True
-            or (isinstance(format.multiline, int) and format.multiline > 1)
-        )
-
-        if is_select:
-            if value not in format.select:
-                if input.defaults in format.select:
-                    value = input.defaults
-                else:
-                    value = None
-            input_widget = widgets.Select(options=format.select, value=value)
-        elif is_textarea:
-            rows = format.multiline if not isinstance(format.multiline, bool) else 5
-            input_widget = widgets.Textarea(value=value, rows=rows)
+        if input_widget_type == InputWidgetType.Select:
+            return SelectInputWidget(input)
+        elif input_widget_type == InputWidgetType.Textarea:
+            return TextAreaInputWidget(input)
+        elif input_widget_type == InputWidgetType.FileUpload:
+            return FileUploadInputWidget(input)
         else:
-            layout = widgets.Layout(width="240px")
-            input_widget = widgets.Text(value=value, layout=layout)
-
-        def set_value(value):
-            if is_select:
-                if value not in format.select:
-                    value = None
-            input_widget.value = value
-
-        return WidgetWrapper(
-            input_widget,
-            input_widget,
-            get_value=lambda: input_widget.value,
-            set_value=set_value,
-        )
+            return TextInputWidget(input)
 
     def create_submit_area(self, _output, on_submit, default_label="Submit"):
         # TODO - Handle multiple actions

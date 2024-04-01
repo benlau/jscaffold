@@ -4,7 +4,7 @@ from jscaffold.services.changedispatcher import (
 )
 from ..decorators import preset_iot_class_method
 from ipywidgets import widgets
-from ..widgetfactory import WidgetFactory
+from ..widgets.widgetfactory import WidgetFactory
 from ..processor import Processor
 
 
@@ -44,8 +44,8 @@ class SingleValueLayout:
 
         def on_change(value):
             try:
-                if self.input_widget.get_value() != value:
-                    self.input_widget.set_value(value)
+                if self.input_widget.value != value:
+                    self.input_widget.value = value
             except Exception as e:
                 self.context.print_line(str(e))
                 raise e
@@ -59,7 +59,7 @@ class SingleValueLayout:
             if self.confirm_button is not None:
                 self.confirm_button.disabled = True
             current_input_value = (
-                self.input_widget.get_value() if self.input is not None else None
+                self.input_widget.value if self.input is not None else None
             )
             task = processor.create_task(self.input, self.output, current_input_value)
             task.add_done_callback(lambda _: enable())
@@ -89,7 +89,7 @@ class SingleValueLayout:
                 self.output, on_submit=on_submit, default_label=self.action_label
             )
             self.confirm_button = confirm_button
-            widgets_box = widgets.VBox(layout + [input_widget.container, submit_area])
+            widgets_box = widgets.VBox(layout + [input_widget.widget, submit_area])
         else:
 
             def on_change(change):
@@ -97,6 +97,6 @@ class SingleValueLayout:
                     on_submit()
 
             self.input_widget.widget.observe(on_change)
-            widgets_box = widgets.VBox(layout + [input_widget.container])
+            widgets_box = widgets.VBox(layout + [input_widget.widget])
 
         return widgets_box

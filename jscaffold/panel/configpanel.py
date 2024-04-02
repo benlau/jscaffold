@@ -20,7 +20,7 @@ class ConfigPanel:
     ):
         self.input = input
         self.output = output
-        self.title = title
+        self._title = title
         self.widget = None
         self.context = context
         self.logger = logger
@@ -44,7 +44,7 @@ class ConfigPanel:
 
         input = self.input
         output = self.output
-        title = self.title
+        title = self._title
 
         if isinstance(input, list):
             layout = FormLayout(
@@ -81,3 +81,8 @@ class ConfigPanel:
     def focus(self):
         if self.layout is not None:
             self.layout.focus()
+        return self
+
+    def title(self, new_title: str):
+        self._title = new_title
+        return self

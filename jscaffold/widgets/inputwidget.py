@@ -123,7 +123,6 @@ class FileUploadInputWidget(InputWidget):
                 # Remarks: type, content, size inside the file_dict
                 filename = file_dict["name"]
                 base_dir = get_upload_folder()
-                os.mkdir(base_dir)
                 abs_path = os.path.join(base_dir, filename)
                 named_file = open(abs_path, "wb")
                 named_file.write(file_dict["content"])

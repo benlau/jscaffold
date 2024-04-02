@@ -3,12 +3,11 @@ from .scaffoldvar import ScaffoldVar
 
 
 class EnvFileVar(ScaffoldVar):
-    def __init__(self, key, filename, defaults=None):
+    def __init__(self, key, filename):
         super().__init__()
         self.filename = filename
         self.key = key
         self.patcher = PatchAssignment()
-        self.defaults = defaults
 
     def get_id(self):
         return f"EnvFile:{self.filename}:{self.key}"

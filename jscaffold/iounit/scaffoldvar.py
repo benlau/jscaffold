@@ -28,6 +28,10 @@ class ScaffoldVar(IOUnit):
     def value(self, value):
         self.write(value)
 
+    def defaults(self, value):
+        self.format.defaults = value
+        return self
+
     def multiline(self, multiline: Optional[Union[bool, int]] = True):
         self.format.multiline = multiline
         return self

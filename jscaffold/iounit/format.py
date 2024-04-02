@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 
 
 class FormatType(Enum):
@@ -20,9 +20,11 @@ class Format:
         select: Optional[List[str]] = None,
         file_source: FileSource = None,
         upload_folder: str = None,
+        defaults: Any = None,
     ):
         self.type = type
         self.multiline = multiline
         self.select = select
         self.file_source = file_source
         self.upload_folder = upload_folder
+        self.defaults = defaults

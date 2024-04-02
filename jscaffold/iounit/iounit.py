@@ -18,7 +18,6 @@ class InputUnit(ABC):
     InputUnit
 
     Properties:
-    - defaults
     - format
     """
 
@@ -27,8 +26,8 @@ class InputUnit(ABC):
 
     def to_string(self, context: Context = None) -> str:
         ret = self.read(context=context)
-        if ret is None and self.defaults is not None:
-            ret = _normalize_defaults(self.defaults)
+        if ret is None and self.format.defaults is not None:
+            ret = _normalize_defaults(self.format.defaults)
         return ret if ret is not None else ""
 
     def read(self, context: Context = None):
@@ -65,9 +64,9 @@ class IOUnit(InputUnit, OutputUnit):
         If the current value is none, read the value.
         If it is also none, write default
         """
-        if self.defaults is None:
+        if self.format.defaults is None:
             return
 
         value = self.read()
         if value is None:
-            self.write(_normalize_defaults(self.defaults))
+            self.write(_normalize_defaults(self.format.defaults))

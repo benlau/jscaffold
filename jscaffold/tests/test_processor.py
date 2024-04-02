@@ -1,6 +1,7 @@
 from jscaffold.processor import Processor
 from unittest.mock import MagicMock
 import asyncio
+import pytest
 
 
 def test_processor_skip_options():
@@ -12,11 +13,12 @@ def test_processor_skip_options():
     processor(input=None, output=callback, value="test")
 
 
-def test_processor_execute_list():
+@pytest.mark.asyncio
+async def test_processor_execute_list():
     callback = MagicMock()
 
     processor = Processor()
-    processor("input", [callback, callback], MagicMock())
+    await processor("input", [callback, callback], MagicMock())
 
     assert callback.call_count == 2
 
@@ -30,3 +32,13 @@ def test_processor_create_task():
     loop = asyncio.get_event_loop()
     loop.run_until_complete(task)
     done.assert_called_once()
+
+
+def test_processor_run_script():
+    output = """echo 123"""
+    context = MagicMock()
+    processor = Processor(context)
+    task = processor.create_task(None, output, MagicMock())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(task)
+    context.print_line.assert_called_once_with("123\n")

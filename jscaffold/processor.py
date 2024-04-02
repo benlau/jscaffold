@@ -1,4 +1,4 @@
-from ipylivebash.sessionmanager import run_script
+from jscaffold.task.runtask import RunTask
 import asyncio
 from inspect import signature
 
@@ -14,7 +14,7 @@ class Processor:
     def __call__(self, input, output, value):
         return self.process(input, output, value)
 
-    def process(self, input, output, value):
+    async def process(self, input, output, value):
         if self.context is not None:
             self.context.clear_output()
         if isinstance(output, list):
@@ -27,10 +27,11 @@ class Processor:
                 script = target
                 # TODO Handle list type
                 env = {
-                    "JS_VALUE": value,
+                    "JS_VALUE": str(value),
                 }
-                task = run_script(script, print_line=self.context.print_line, env=env)
-                asyncio.get_event_loop().create_task(task)
+                run_task = RunTask()
+                run_task.script = script
+                await run_task(print_line=self.context.print_line, env=env)
             elif callable(target):
                 sig = signature(target)
                 arg_count = len(sig.parameters)
@@ -40,6 +41,6 @@ class Processor:
 
     def create_task(self, input, output, value):
         async def run():
-            return self.process(input, output, value)
+            return await self.process(input, output, value)
 
         return asyncio.get_event_loop().create_task(run())

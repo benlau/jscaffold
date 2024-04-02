@@ -45,9 +45,9 @@ class RunTask:
                     pending_messages.append(line)
                     mutex.release()
             except Exception as e:
-                self.process_finish_messages.append(str(e))
+                raise e
 
-            self.exit_code = process.poll()
+            self.exit_code = self.process.poll()
             mutex.acquire()
             running = False
             mutex.release()

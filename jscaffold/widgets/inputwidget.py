@@ -117,7 +117,6 @@ class FileUploadInputWidget(InputWidget):
             base_dir = tempfile.mkdtemp()
             if format.mkdir:
                 Path(base_dir).mkdir(parents=True, exist_ok=True)
-            print("create", base_dir)
             return base_dir
 
         def on_upload_change(change):

@@ -1,3 +1,4 @@
+from unittest.mock import MagicMock
 from jscaffold.task.runtask import RunTask
 import pytest
 import threading
@@ -25,3 +26,15 @@ async def test_runtask_should_print_line_at_main_thread():
 
     assert content == ["1\n", "2\n", "3\n"]
     assert is_main_thread is True
+
+
+@pytest.mark.asyncio
+async def test_runtask_should_support_env():
+    env = {"JS_VALUE": "test"}
+    script = "echo $JS_VALUE"
+    print_line = MagicMock()
+
+    runtask = RunTask()
+    runtask.script = script
+    await runtask(print_line=print_line, env=env)
+    print_line.assert_called_once_with("test\n")

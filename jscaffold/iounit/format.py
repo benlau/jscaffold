@@ -21,6 +21,8 @@ class Format:
         file_source: FileSource = None,
         upload_folder: str = None,
         defaults: Any = None,
+        # For file
+        mkdir: bool = True,
     ):
         self.type = type
         self.multiline = multiline
@@ -28,3 +30,4 @@ class Format:
         self.file_source = file_source
         self.upload_folder = upload_folder
         self.defaults = defaults
+        self.mkdir = mkdir

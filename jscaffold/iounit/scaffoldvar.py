@@ -43,8 +43,9 @@ class ScaffoldVar(IOUnit):
         self.format.select = list(args)
         return self
 
-    def upload_file(self, folder: str = None):
+    def upload_file(self, folder: str = None, mkdir: bool = False):
         self.format.type = FormatType.File.value
         self.format.file_source = FileSource.Upload.value
         self.format.upload_folder = folder
+        self.format.mkdir = mkdir
         return self

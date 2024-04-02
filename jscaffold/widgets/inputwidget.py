@@ -3,13 +3,14 @@ from jscaffold.iounit.iounit import InputUnit
 from ipywidgets import widgets
 import tempfile
 import os
+from pathlib import Path
 
 
 class InputWidgetType(Enum):
     Text = "text"
     Select = "select"
     Textarea = "textarea"
-    TempFilePicker = "tmp_file_picker"
+    UploadFile = "upload_file"
 
 
 class InputWidget:
@@ -101,7 +102,7 @@ class SelectInputWidget(InputWidget):
 
 class FileUploadInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
-        super().__init__(InputWidgetType.TempFilePicker.value)
+        super().__init__(InputWidgetType.UploadFile.value)
         value = str(input) if input is not None else None
 
         format = input.format
@@ -113,8 +114,10 @@ class FileUploadInputWidget(InputWidget):
         def get_upload_folder():
             if format.upload_folder is not None:
                 return format.upload_folder
-            with tempfile.TemporaryDirectory() as temp_dir:
-                base_dir = temp_dir
+            base_dir = tempfile.mkdtemp()
+            if format.mkdir:
+                Path(base_dir).mkdir(parents=True, exist_ok=True)
+            print("create", base_dir)
             return base_dir
 
         def on_upload_change(change):

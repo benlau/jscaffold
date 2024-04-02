@@ -12,6 +12,10 @@ from ..iounit.iounit import OutputUnit
 
 
 class ApplyToSource(OutputUnit):
+    """
+    An OutputUnit that writes the value to the source input.
+    """
+
     def __call__(self, value, context):
         values = []
         sources = []
@@ -27,12 +31,14 @@ class ApplyToSource(OutputUnit):
             source.write(value, context)
 
 
-# FormLayout is a class that creates a layout for a form.
-# TODO:
-# - Add support for debouncer
-
-
 class FormLayout:
+    """
+    FormLayout is a class that creates a layout for a form.
+    """
+
+    # TODO:
+    # - Add support for debouncer
+
     def __init__(
         self,
         input: List[ScaffoldVar],

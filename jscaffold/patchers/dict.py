@@ -17,8 +17,7 @@ class PatchDict:
             else:
                 return None
 
-        value = str(current)
-        return value
+        return current
 
     def write(self, object, path, value):
         keys = path.split(".")

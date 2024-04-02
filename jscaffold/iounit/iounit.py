@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 from abc import ABC
 from ..context import Context
 from jscaffold.services.changedispatcher import change_dispatcher
@@ -30,10 +30,10 @@ class InputUnit(ABC):
             ret = _normalize_defaults(self.format.defaults)
         return ret if ret is not None else ""
 
-    def read(self, context: Context = None):
+    def read(self, context: Context = None) -> Optional[Any]:
         return self._read(context=context)
 
-    def _read(self, context: Context = None) -> Optional[str]:
+    def _read(self, context: Context = None) -> Optional[Any]:
         """
         Read raw value. If the value is not set, return None
         """

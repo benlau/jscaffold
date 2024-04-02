@@ -1,7 +1,4 @@
-from .interfacebuilder import InterfaceBuilder
-
-
-class Context(InterfaceBuilder):
+class Context:
     def __init__(
         self,
         current_block_index=None,

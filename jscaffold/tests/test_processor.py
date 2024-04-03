@@ -6,13 +6,14 @@ import pytest
 from tempfile import NamedTemporaryFile
 
 
-def test_processor_skip_options():
+@pytest.mark.asyncio
+async def test_processor_skip_options():
     processor = Processor()
 
     def callback(value):
         assert value == "test"
 
-    processor(input=None, output=callback, value="test")
+    await processor(input=None, output=callback, value="test")
 
 
 @pytest.mark.asyncio

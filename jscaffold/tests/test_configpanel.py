@@ -3,8 +3,8 @@ from jscaffold.panel.configpanel import ConfigPanel
 
 def test_no_input():
     """
-    No input object should be allowed
+    No input object can be allowed
     """
 
     script = "ls"
-    ConfigPanel(output=script).setup()
+    ConfigPanel(output=script)

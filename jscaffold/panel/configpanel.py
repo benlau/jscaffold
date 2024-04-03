@@ -8,6 +8,18 @@ from ipywidgets import widgets
 
 
 class ConfigPanel:
+    class State:
+        """
+        The State object hold the properties
+        that may need to refresh the UI when
+        changed
+        """
+
+        def __init__(self):
+            self.instant_write = False
+            self.title = None
+            self.action_label = "Confirm"
+
     @preset_iot_class_method
     def __init__(
         self,
@@ -16,20 +28,17 @@ class ConfigPanel:
         title=None,
         logger=None,
         context=None,
-        instant_write=False,
+        instant_write=False,  # TODO
     ):
         self.input = input
         self.output = output
-        self._title = title
         self.widget = None
         self.context = context
         self.logger = logger
-        self.instant_write = instant_write
         self.is_setup_completed = False
-
-    def setup(self):
-        if self.is_setup_completed:
-            return
+        self.state = ConfigPanel.State()
+        self.state.title = title
+        self.state.instant_write = instant_write
 
         if self.logger is None:
             self.logger = Logger()
@@ -42,9 +51,12 @@ class ConfigPanel:
                 clear_output=self.logger.clear_output,
             )
 
+        self.create_widget()
+
+    def create_widget(self):
         input = self.input
         output = self.output
-        title = self._title
+        title = self.state.title
 
         if isinstance(input, list):
             layout = FormLayout(
@@ -52,7 +64,7 @@ class ConfigPanel:
                 output,
                 title,
                 context=self.context,
-                instant_write=self.instant_write,
+                instant_write=self.state.instant_write,
             )
         else:
             layout = SingleValueLayout(
@@ -60,22 +72,21 @@ class ConfigPanel:
                 output,
                 title,
                 context=self.context,
-                instant_write=self.instant_write,
+                instant_write=self.state.instant_write,
             )
         self.layout = layout
 
         self.widget = widgets.VBox([self.layout.widget, self.logger.widget])
 
-        self.focus()
-        self.is_setup_completed = True
+    def update_widget(self):
+        self.layout.title(self.state.title).action_label(self.state.action_label)
 
     def __repr__(self):
         return ""
 
     def show(self):
-        if not self.is_setup_completed:
-            self.setup()
         display(self.widget)
+        self.focus()
         return self
 
     def focus(self):
@@ -84,5 +95,11 @@ class ConfigPanel:
         return self
 
     def title(self, new_title: str):
-        self._title = new_title
+        self.state.title = new_title
+        self.update_widget()
+        return self
+
+    def action_label(self, new_label: str):
+        self.state.action_label = new_label
+        self.update_widget()
         return self

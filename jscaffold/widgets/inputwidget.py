@@ -109,7 +109,7 @@ class FileUploadInputWidget(InputWidget):
         text_box = widgets.Text(value=value, layout=widgets.Layout(width="300px"))
         uploader = widgets.FileUpload(multiple=False)
         self.text_box = text_box
-        self.widget = widgets.HBox([text_box, uploader], width="360px")
+        self.widget = widgets.HBox([text_box, uploader])
 
         def get_upload_folder():
             if format.upload_folder is not None:

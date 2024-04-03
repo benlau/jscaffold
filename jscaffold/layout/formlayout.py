@@ -16,6 +16,11 @@ class FormLayout:
     FormLayout is a class that creates a layout for a form.
     """
 
+    class State:
+        def __init__(self):
+            self.title = None
+            self.action_label = "Confirm"
+
     # TODO:
     # - Add support for debouncer
 
@@ -33,24 +38,24 @@ class FormLayout:
             self.input = [input]
         if output is None:
             output = ApplyToSource()
-        self.title = title
         self.output = output
         self.input_widgets = []
         self.context = context
         self.instant_write = instant_write
         self.confirm_button = None
-        self.widget = self._create_ipywidget()
+        self.state = FormLayout.State()
+        self.state.title = title
+        self.create_widget()
+        self.update_widget()
 
     # pylama:ignore=C901
-    def _create_ipywidget(self):
+    def create_widget(self):
         factory = WidgetFactory()
         output_widget = DoubleBufferOutput()
 
         layout = []
-        title_widget = None
-        if self.title is not None:
-            title_widget = widgets.Label(value=self.title)
-            layout.append(title_widget)
+        self.title_widget = widgets.Label()
+        layout.append(self.title_widget)
 
         grid = widgets.GridspecLayout(len(self.input), 2)
 
@@ -72,9 +77,7 @@ class FormLayout:
             return listener
 
         for i, input in enumerate(self.input):
-            label = widgets.Label(
-                value=input.key, layout=widgets.Layout(margin_right="20px")
-            )
+            label = widgets.Label(value=input.key, layout=widgets.Layout())
             label.layout.margin = "0px 20px 0px 0px"
 
             input_widget = factory.create_input(input)
@@ -99,6 +102,7 @@ class FormLayout:
             task = processor.create_task(self.input, self.output, values)
             task.add_done_callback(lambda _: enable())
 
+        self.confirm_button = None
         if self.instant_write is False:
             (submit_area, confirm_button) = factory.create_submit_area(
                 self.output, on_submit
@@ -116,8 +120,26 @@ class FormLayout:
 
                 widget.widget.observe(on_change)
             widgets_box = widgets.VBox(layout + [grid, output_widget.widget])
-        return widgets_box
+        self.widget = widgets_box
+
+    def update_widget(self):
+        self.title_widget.value = self.state.title if self.state.title else ""
+        self.title_widget.layout.visibility = (
+            "visible" if self.state.title else "hidden"
+        )
+        if self.confirm_button is not None:
+            self.confirm_button.description = self.state.action_label
 
     def focus(self):
         if len(self.input_widgets) > 0:
             self.input_widgets[0].focus()
+
+    def title(self, value):
+        self.state.title = value
+        self.update_widget()
+        return self
+
+    def action_label(self, value):
+        self.state.action_label = value
+        self.update_widget()
+        return self

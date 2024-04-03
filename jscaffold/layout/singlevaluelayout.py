@@ -13,6 +13,12 @@ class SingleValueLayout:
     SingleValueLayout is a internal class that creates a layout for a single input value.
     """
 
+    class State:
+        def __init__(self):
+            self.instant_write = False
+            self.title = None
+            self.action_label = "Confirm"
+
     @preset_iot_class_method
     def __init__(
         self,
@@ -23,21 +29,22 @@ class SingleValueLayout:
         instant_write=False,
     ):
         self.input = input
-        self.title = title
         self.output = output
-        self.action_label = "Confirm"
         self.context = context
-        self.instant_write = instant_write
         self.confirm_button = None
-        self.widget = self._create_ipywidget()
-        self.is_running = False
+
+        self.state = SingleValueLayout.State()
+        self.state.title = title
+        self.state.instant_write = instant_write
+        self.create_widget()
+        self.update_widget()
 
     def focus(self):
         if self.input_widget is not None:
             self.input_widget.focus()
 
     # pylama:ignore=C901
-    def _create_ipywidget(self):
+    def create_widget(self):
         layout = []
         factory = WidgetFactory()
         self.input_widget = None
@@ -64,19 +71,18 @@ class SingleValueLayout:
             task = processor.create_task(self.input, self.output, current_input_value)
             task.add_done_callback(lambda _: enable())
 
-        title_widget = None
-        if self.title is not None:
-            # TODO: Update title style
-            title_widget = widgets.Label(value=self.title)
-            layout.append(title_widget)
+        # TODO: Update title style
+        self.title_widget = widgets.Label(value=self.state.title)
+        layout.append(self.title_widget)
 
         if self.input is None:
             (submit_area, confirm_button) = factory.create_submit_area(
-                self.output, on_submit=on_submit, default_label=self.action_label
+                self.output, on_submit=on_submit, default_label=self.state.action_label
             )
             self.confirm_button = confirm_button
             widgets_box = widgets.VBox(layout + [submit_area])
-            return widgets_box
+            self.widget = widgets_box
+            return
 
         input_widget = factory.create_input(self.input)
         self.input_widget = input_widget
@@ -84,9 +90,10 @@ class SingleValueLayout:
         listener = Listener(self.input.get_id(), on_change)
         change_dispatcher.add_listener(listener)
 
-        if self.instant_write is False:
+        self.confirm_button = None
+        if self.state.instant_write is False:
             (submit_area, confirm_button) = factory.create_submit_area(
-                self.output, on_submit=on_submit, default_label=self.action_label
+                self.output, on_submit=on_submit, default_label=self.state.action_label
             )
             self.confirm_button = confirm_button
             widgets_box = widgets.VBox(layout + [input_widget.widget, submit_area])
@@ -99,4 +106,22 @@ class SingleValueLayout:
             self.input_widget.widget.observe(on_change)
             widgets_box = widgets.VBox(layout + [input_widget.widget])
 
-        return widgets_box
+        self.widget = widgets_box
+
+    def update_widget(self):
+        self.title_widget.value = self.state.title if self.state.title else ""
+        self.title_widget.layout.visibility = (
+            "visible" if self.state.title else "hidden"
+        )
+        if self.confirm_button is not None:
+            self.confirm_button.description = self.state.action_label
+
+    def title(self, value):
+        self.state.title = value
+        self.update_widget()
+        return self
+
+    def action_label(self, value):
+        self.state.action_label = value
+        self.update_widget()
+        return self

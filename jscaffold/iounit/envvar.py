@@ -10,7 +10,10 @@ class EnvVar(ScaffoldVar):
 
     def __init__(self, key):
         super().__init__()
-        self.key = key
+        self._key = key
+
+    def get_key(self):
+        return self._key
 
     def get_id(self):
         return f"Env:{self.key}"

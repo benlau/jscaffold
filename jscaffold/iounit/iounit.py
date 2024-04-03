@@ -39,6 +39,13 @@ class InputUnit(ABC):
         """
         raise NotImplementedError()
 
+    @property
+    def key(self):
+        return self.get_key()
+
+    def get_key(self):
+        raise NotImplementedError()
+
     def get_id(self):
         raise NotImplementedError()
 

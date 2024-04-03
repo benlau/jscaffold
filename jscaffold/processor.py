@@ -11,24 +11,25 @@ class Processor:
     def __init__(self, context=None):
         self.context = context
 
-    def __call__(self, input, output, value):
-        return self.process(input, output, value)
+    async def __call__(self, input, output, value):
+        return await self.process(input, output, value)
 
     async def process(self, input, output, value):
         if self.context is not None:
             self.context.clear_output()
-        if isinstance(output, list):
-            outputs = output
-        else:
-            outputs = [output]
 
+        outputs = [output] if not isinstance(output, list) else output
+        inputs = [input] if not isinstance(input, list) else input
+        inputs = [input for input in inputs if input is not None]
         for target in outputs:
             if isinstance(target, str):
                 script = target
-                # TODO Handle list type
-                env = {
-                    "JS_VALUE": str(value),
-                }
+                env = dict(
+                    [
+                        (input.key, str(input.value) if input.value is not None else "")
+                        for input in inputs
+                    ]
+                )
                 run_task = RunTask()
                 run_task.script = script
                 await run_task(print_line=self.context.print_line, env=env)

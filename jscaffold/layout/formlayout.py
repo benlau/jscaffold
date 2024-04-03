@@ -1,4 +1,5 @@
 from typing import List
+from jscaffold.iounit.applytosource import ApplyToSource
 from jscaffold.processor import Processor
 from jscaffold.services.changedispatcher import (
     Listener,
@@ -8,27 +9,6 @@ import ipywidgets as widgets
 from jscaffold.iounit.scaffoldvar import ScaffoldVar
 from ..doublebufferoutput import DoubleBufferOutput
 from ..widgets.widgetfactory import WidgetFactory
-from ..iounit.iounit import OutputUnit
-
-
-class ApplyToSource(OutputUnit):
-    """
-    An OutputUnit that writes the value to the source input.
-    """
-
-    def __call__(self, value, context):
-        values = []
-        sources = []
-        if isinstance(value, list):
-            values = value
-            sources = context.input
-        else:
-            values = [value]
-            sources = [context.input]
-
-        for index, value in enumerate(values):
-            source = sources[index]
-            source.write(value, context)
 
 
 class FormLayout:

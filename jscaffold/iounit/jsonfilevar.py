@@ -8,10 +8,13 @@ class JsonFileVar(ScaffoldVar):
     def __init__(self, key, filename, defaults=None, indent=None):
         super().__init__()
         self.filename = filename
-        self.key = key
+        self._key = key
         self.patcher = PatchDict()
         self.defaults = defaults
         self.indent = indent
+
+    def get_key(self):
+        return self._key
 
     def get_id(self):
         return f"JsonFile:{self.filename}:{self.key}"

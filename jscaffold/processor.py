@@ -22,23 +22,30 @@ class Processor:
         inputs = [input] if not isinstance(input, list) else input
         inputs = [input for input in inputs if input is not None]
         for target in outputs:
-            if isinstance(target, str):
-                script = target
-                env = dict(
-                    [
-                        (input.key, str(input.value) if input.value is not None else "")
-                        for input in inputs
-                    ]
-                )
-                run_task = RunTask()
-                run_task.script = script
-                await run_task(print=self.context.print, env=env)
-            elif callable(target):
-                sig = signature(target)
-                arg_count = len(sig.parameters)
+            try:
+                if isinstance(target, str):
+                    script = target
+                    env = dict(
+                        [
+                            (
+                                input.key,
+                                str(input.value) if input.value is not None else "",
+                            )
+                            for input in inputs
+                        ]
+                    )
+                    run_task = RunTask()
+                    run_task.script = script
+                    await run_task(print=self.context.print, env=env)
+                elif callable(target):
+                    sig = signature(target)
+                    arg_count = len(sig.parameters)
 
-                args = [value, self.context][:arg_count]
-                target(*args)
+                    args = [value, self.context][:arg_count]
+                    target(*args)
+            except Exception as e:
+                if self.context is not None:
+                    self.context.print(str(e))
 
     def create_task(self, input, output, value):
         async def run():

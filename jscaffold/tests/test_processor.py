@@ -59,3 +59,18 @@ async def test_processor_run_script_pass_variable():
 
     await processor(var, output, var.value)
     context.print.assert_called_once_with("123\n")
+
+
+@pytest.mark.asyncio
+async def test_processor_throw_exception():
+    """
+    It should write the error message to context.print
+    """
+
+    def callback():
+        raise Exception("Error")
+
+    context = MagicMock()
+    processor = Processor(context)
+    await processor(None, callback, context)
+    context.print.assert_called_once_with("Error")

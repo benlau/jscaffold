@@ -15,7 +15,7 @@ def write_to_tmp(dict):
 
 def test_jsonfilevar_get_id():
     variable = JsonFileVar("A", "./config.json")
-    assert variable.get_id() == "JsonFile:./config.json:A"
+    assert variable._get_id() == "JsonFile:./config.json:A"
 
 
 def test_jsonfilevar_read_from_file():

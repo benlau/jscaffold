@@ -9,10 +9,10 @@ class EnvFileVar(ScaffoldVar):
         self._key = key
         self.patcher = PatchAssignment()
 
-    def get_key(self):
+    def _get_key(self):
         return self._key
 
-    def get_id(self):
+    def _get_id(self):
         return f"EnvFile:{self.filename}:{self.key}"
 
     def _write(self, value, context=None):

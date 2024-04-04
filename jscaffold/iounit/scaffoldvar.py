@@ -24,10 +24,6 @@ class ScaffoldVar(IOUnit):
     def value(self):
         return self.read()
 
-    @value.setter
-    def value(self, value):
-        self.write(value)
-
     def defaults(self, value):
         self.format.defaults = value
         return self

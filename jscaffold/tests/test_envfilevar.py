@@ -4,7 +4,7 @@ from tempfile import NamedTemporaryFile
 
 def test_envfilevar_get_id():
     variable = EnvFileVar("A", "./config.env")
-    assert variable.get_id() == "EnvFile:./config.env:A"
+    assert variable._get_id() == "EnvFile:./config.env:A"
 
 
 def test_envfile_var_read_not_existed_file():

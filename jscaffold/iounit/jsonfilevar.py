@@ -23,10 +23,10 @@ class JsonFileVar(ScaffoldVar):
         self.state.indent = indent
         return self
 
-    def get_key(self):
+    def _get_key(self):
         return self.state.key
 
-    def get_id(self):
+    def _get_id(self):
         return f"JsonFile:{self.filename}:{self.state.key}"
 
     def reader(self, value):

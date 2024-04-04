@@ -6,7 +6,7 @@ from unittest.mock import patch
 def test_envvar_get_id():
     var = EnvVar("VALUE_NOT_EXISTED")
 
-    assert var.get_id() == "Env:VALUE_NOT_EXISTED"
+    assert var._get_id() == "Env:VALUE_NOT_EXISTED"
 
 
 def test_envvar_defaults_is_array():

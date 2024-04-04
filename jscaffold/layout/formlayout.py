@@ -84,7 +84,7 @@ class FormLayout:
             grid[i, 0] = label
             grid[i, 1] = input_widget.widget
             self.input_widgets.append(input_widget)
-            listener = create_listener(input.get_id(), input_widget)
+            listener = create_listener(input._get_id(), input_widget)
             change_dispatcher.add_listener(listener)
 
         def on_submit():

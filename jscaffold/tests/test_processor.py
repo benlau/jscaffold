@@ -55,7 +55,7 @@ async def test_processor_run_script_pass_variable():
     tmp_file = NamedTemporaryFile(delete=True)
 
     var = EnvFileVar("VAR1", tmp_file.name)
-    var.value = "123"
+    var.write("123")
 
     await processor(var, output, var.value)
     context.print_line.assert_called_once_with("123\n")

@@ -87,7 +87,7 @@ class SingleValueLayout:
         input_widget = factory.create_input(self.input)
         self.input_widget = input_widget
 
-        listener = Listener(self.input.get_id(), on_change)
+        listener = Listener(self.input._get_id(), on_change)
         change_dispatcher.add_listener(listener)
 
         self.confirm_button = None

@@ -15,10 +15,7 @@ def _normalize_defaults(defaults):
 
 class InputUnit(ABC):
     """
-    InputUnit
-
-    Properties:
-    - format
+    InputUnit is a class that represents an input unit.
     """
 
     def __str__(self):
@@ -35,18 +32,22 @@ class InputUnit(ABC):
 
     def _read(self, context: Context = None) -> Optional[Any]:
         """
-        Read raw value. If the value is not set, return None
+        Read the raw value. If the value is not set, return None
         """
         raise NotImplementedError()
 
     @property
-    def key(self):
-        return self.get_key()
+    def id(self):
+        return self._get_id()
 
-    def get_key(self):
+    @property
+    def key(self):
+        return self._get_key()
+
+    def _get_key(self):
         raise NotImplementedError()
 
-    def get_id(self):
+    def _get_id(self):
         raise NotImplementedError()
 
 
@@ -55,11 +56,11 @@ class OutputUnit(ABC):
         return self.write(value, context=context)
 
     def write(self, value=None, context: Context = None):
+        ret = self._write(value, context=context)
         if isinstance(self, InputUnit):
-            object_id = self.get_id()
+            object_id = self._get_id()
             change_dispatcher.dispatch(object_id, value)
-
-        return self._write(value, context=context)
+        return ret
 
     def _write(self, value=None, context: Context = None):
         raise NotImplementedError()

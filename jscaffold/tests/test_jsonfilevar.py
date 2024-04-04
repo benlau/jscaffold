@@ -67,3 +67,12 @@ def test_jsonfilevar_func_reader(mock_open):
 
     var = JsonFileVar("C", "mock-file").reader(query)
     assert var.value == "value"
+
+
+@patch("builtins.open")
+def test_jsonfilevar_func_path(mock_open):
+    json_str = '{"A": {"B": {"C": "value"}}}'
+    mock_open.return_value.__enter__().read.return_value = json_str
+
+    var = JsonFileVar("C", "mock-file").path("A.B.C")
+    assert var.value == "value"

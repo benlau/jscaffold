@@ -10,13 +10,14 @@ class JsonFileVar(ScaffoldVar):
             self.key = None
             self.indent = None
             self.reader = None
+            self.path = None
 
     def __init__(self, key, filename):
         super().__init__()
         self.filename = filename
         self.patcher = PatchDict()
         self.state = JsonFileVar.State()
-        self.state.reader = key
+        self.state.path = key
         self.state.key = key
 
     def indent(self, indent):
@@ -33,11 +34,15 @@ class JsonFileVar(ScaffoldVar):
         self.state.reader = value
         return self
 
+    def path(self, value):
+        self.state.path = value
+        return self
+
     def _write(self, value, context=None):
         content = self._read_json_from_file()
         if content is None:
             content = {}
-        new_content = self.patcher.write(content, self.state.key, value)
+        new_content = self.patcher.write(content, self.state.path, value)
         file = open(self.filename, "w")
         file.write(json.dumps(new_content, indent=self.state.indent))
         file.close()
@@ -53,7 +58,10 @@ class JsonFileVar(ScaffoldVar):
         if callable(self.state.reader):
             value = self.state.reader(content)
         else:
-            value = self.patcher.read(content, self.state.reader)
+            value = self.patcher.read(
+                content,
+                self.state.reader if self.state.reader is not None else self.state.path,
+            )
         if value is None:
             return None
         return value

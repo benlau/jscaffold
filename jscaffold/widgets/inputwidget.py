@@ -34,11 +34,13 @@ class InputWidget:
 class TextInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
         super().__init__(InputWidgetType.Text.value)
-        value = str(input) if input is not None else None
-
+        value = input.read() if input is not None else None
+        placeholder = input._query_defaults()
+        if placeholder is None:
+            placeholder = ""
         layout = widgets.Layout(width="360px")
-        text_box = widgets.Text(value=value, layout=layout)
-        self.widget = text_box
+        text_widget = widgets.Text(value=value, layout=layout, placeholder=placeholder)
+        self.widget = text_widget
 
     @property
     def value(self):

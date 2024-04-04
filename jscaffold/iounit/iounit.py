@@ -4,15 +4,6 @@ from ..context import Context
 from jscaffold.services.changedispatcher import change_dispatcher
 
 
-def _normalize_defaults(defaults):
-    ret = None
-    if isinstance(defaults, str):
-        ret = defaults
-    elif isinstance(defaults, list):
-        ret = defaults[0]
-    return ret
-
-
 class InputUnit(ABC):
     """
     InputUnit is a class that represents an input unit.
@@ -42,8 +33,21 @@ class InputUnit(ABC):
         if read_value is not None:
             return read_value
         if self.format.defaults is not None:
-            return _normalize_defaults(self.format.defaults)
+            return self._query_defaults()
         return None
+
+    def _query_defaults(self):
+        """
+        Query the default value
+        """
+        defaults = self.format.defaults
+        ret = None
+        if isinstance(defaults, list):
+            ret = defaults[0]
+        else:
+            ret = defaults
+
+        return ret
 
     @property
     def id(self):
@@ -86,4 +90,4 @@ class IOUnit(InputUnit, OutputUnit):
 
         value = self._read()
         if value is None:
-            self.write(_normalize_defaults(self.format.defaults))
+            self.write(self._query_defaults())

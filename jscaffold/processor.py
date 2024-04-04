@@ -32,7 +32,7 @@ class Processor:
                 )
                 run_task = RunTask()
                 run_task.script = script
-                await run_task(print_line=self.context.print_line, env=env)
+                await run_task(print=self.context.print, env=env)
             elif callable(target):
                 sig = signature(target)
                 arg_count = len(sig.parameters)

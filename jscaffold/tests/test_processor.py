@@ -44,7 +44,7 @@ def test_processor_run_script():
     task = processor.create_task(None, output, MagicMock())
     loop = asyncio.get_event_loop()
     loop.run_until_complete(task)
-    context.print_line.assert_called_once_with("123\n")
+    context.print.assert_called_once_with("123\n")
 
 
 @pytest.mark.asyncio
@@ -58,4 +58,4 @@ async def test_processor_run_script_pass_variable():
     var.write("123")
 
     await processor(var, output, var.value)
-    context.print_line.assert_called_once_with("123\n")
+    context.print.assert_called_once_with("123\n")

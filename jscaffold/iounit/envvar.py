@@ -21,8 +21,8 @@ class EnvVar(ScaffoldVar):
     def _write(self, value=None, context: Context = None):
         validaed_value = self.validate(value, self.format.defaults)
         os.environ[self.key] = validaed_value
-        if context is not None and context.print_line is not None:
-            context.print_line(f"Set {self.key}={value}\n")
+        if context is not None and context.print is not None:
+            context.print(f"Set {self.key}={value}\n")
 
     def _read(self, context: Context = None):
         return os.getenv(self.key)

@@ -29,7 +29,7 @@ class Scaffold(InterfaceBuilder):
             input=input,
             output=output,
             main_layout=main_layout,
-            print_line=output_widget.append_stdout,
+            print=output_widget.append_stdout,
             clear_output=output_widget.clear_output,
         )
 

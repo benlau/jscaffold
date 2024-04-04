@@ -5,11 +5,11 @@ import threading
 
 
 @pytest.mark.asyncio
-async def test_runtask_should_print_line_at_main_thread():
+async def test_runtask_should_print_at_main_thread():
     content = []
     is_main_thread = None
 
-    def print_line(line):
+    def print(line):
         content.append(line)
         nonlocal is_main_thread
         is_main_thread = threading.current_thread() is threading.main_thread()
@@ -22,7 +22,7 @@ async def test_runtask_should_print_line_at_main_thread():
 
     runtask = RunTask()
     runtask.script = script
-    await runtask(print_line=print_line)
+    await runtask(print=print)
 
     assert content == ["1\n", "2\n", "3\n"]
     assert is_main_thread is True
@@ -32,9 +32,9 @@ async def test_runtask_should_print_line_at_main_thread():
 async def test_runtask_should_support_env():
     env = {"JS_VALUE": "test"}
     script = "echo $JS_VALUE"
-    print_line = MagicMock()
+    print = MagicMock()
 
     runtask = RunTask()
     runtask.script = script
-    await runtask(print_line=print_line, env=env)
-    print_line.assert_called_once_with("test\n")
+    await runtask(print=print, env=env)
+    print.assert_called_once_with("test\n")

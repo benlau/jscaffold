@@ -14,7 +14,7 @@ class RunTask:
         self.threads = []
 
     # pylama:ignore=C901
-    def __call__(self, print_line=print, flush=None, env=None):
+    def __call__(self, print=print, flush=None, env=None):
         mutex = threading.Lock()
         pending_messages = []
         running = True
@@ -54,14 +54,14 @@ class RunTask:
 
         def write_batch(messages):
             for message in messages:
-                print_line(message)
+                print(message)
             if flush is not None:
                 flush()
 
         def writer():
             nonlocal running
             nonlocal pending_messages
-            nonlocal print_line
+            nonlocal print
             while running:
                 time.sleep(0.1)
                 mutex.acquire()

@@ -42,8 +42,8 @@ class JsonFileVar(ScaffoldVar):
         file.write(json.dumps(new_content, indent=self.state.indent))
         file.close()
 
-        if context is not None and context.print_line is not None:
-            context.print_line(f"Set {self.key}={value} to {self.filename}\n")
+        if context is not None and context.print is not None:
+            context.print(f"Set {self.key}={value} to {self.filename}\n")
 
     def _read(self, context=None):
         content = self._read_json_from_file()

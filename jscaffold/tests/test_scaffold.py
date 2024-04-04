@@ -8,7 +8,7 @@ from jscaffold.context import Context
 def test_scaffold_form_layout():
     context = Context(
         main_layout=Mock(),
-        print_line=Mock(),
+        print=Mock(),
         clear_output=Mock(),
     )
     delegate = Block(

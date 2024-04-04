@@ -6,7 +6,7 @@ class Context:
         input=None,
         output=None,
         main_layout=None,
-        print_line=None,
+        print=None,
         clear_output=None,
         processor=None,
     ):
@@ -18,7 +18,7 @@ class Context:
         self.main_layout = main_layout
 
         # For reporting the progress
-        self.print_line = print_line
+        self.print = print
         self.processor = processor
         self._clear_output = clear_output
 
@@ -36,6 +36,6 @@ class Context:
             input=input,
             output=output,
             main_layout=self.main_layout,
-            print_line=self.print_line,
+            print=self.print,
             clear_output=self.clear_output,
         )

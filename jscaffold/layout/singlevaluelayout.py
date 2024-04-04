@@ -54,7 +54,7 @@ class SingleValueLayout:
                 if self.input_widget.value != value:
                     self.input_widget.value = value
             except Exception as e:
-                self.context.print_line(str(e))
+                self.context.print(str(e))
                 raise e
 
         def on_submit():

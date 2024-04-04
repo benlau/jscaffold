@@ -47,7 +47,7 @@ class ConfigPanel:
             self.context = Context(
                 input=self.input,
                 output=self.output,
-                print_line=self.logger.append_stdout,
+                print=self.logger.append_stdout,
                 clear_output=self.logger.clear_output,
             )
 

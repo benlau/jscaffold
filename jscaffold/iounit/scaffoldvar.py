@@ -6,6 +6,8 @@ from .format import FileSource, FormatType, Format
 class ScaffoldVar(IOUnit):
     def __init__(self):
         self.format = Format()
+        self._has_cached_value = False
+        self._cached_value = None
 
     def validate(self, value=None, defaults=None):
         if value is not None:
@@ -20,9 +22,22 @@ class ScaffoldVar(IOUnit):
 
         return None
 
+    def refresh(self, context=None):
+        self._has_cached_value = True
+        self._cached_value = self._normalize_read_value(self._read(context=context))
+        return self
+
+    def update(self, value, context=None):
+        self._write(value, context=context)
+        self._cached_value = value
+        return self
+
     @property
     def value(self):
-        return self.read()
+        # value should not be writable
+        if not self._has_cached_value:
+            self.refresh()
+        return self._cached_value
 
     def defaults(self, value):
         self.format.defaults = value

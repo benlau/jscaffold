@@ -15,19 +15,19 @@ def write_to_tmp(dict):
 
 def test_jsonfilevar_get_id():
     variable = JsonFileVar("A", "./config.json")
-    assert variable._get_id() == "JsonFile:./config.json:A"
+    assert variable.id == "JsonFile:./config.json:A"
 
 
 def test_jsonfilevar_read_from_file():
     source = write_to_tmp({"A": {"B": {"C": "value"}}})
     variable = JsonFileVar("A.B.C", source)
-    assert variable.read() == "value"
+    assert variable.value == "value"
 
 
 def test_jsonfilevar_read_boolean_from_file():
     source = write_to_tmp({"A": {"B": {"C": True}}})
     variable = JsonFileVar("A.B.C", source)
-    assert variable.read() is True
+    assert variable.value is True
 
 
 def test_jsonfilevar_write_to_file():

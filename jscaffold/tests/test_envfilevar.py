@@ -8,8 +8,8 @@ def test_envfilevar_get_id():
 
 
 def test_envfile_var_read_not_existed_file():
-    var = EnvFileVar("not_existed_file", "var").defaults("default")
-    assert var.read() is None
+    var = EnvFileVar("var", "not_existed_file").defaults("default")
+    assert var._read() is None
     assert var.to_string() == "default"
 
 

@@ -22,9 +22,8 @@ class InputUnit(ABC):
         return self.to_string()
 
     def to_string(self, context: Context = None) -> str:
-        ret = self.read(context=context)
-        if ret is None and self.format.defaults is not None:
-            ret = _normalize_defaults(self.format.defaults)
+        ret = self._read(context=context)
+        ret = self._normalize_read_value(ret)
         return ret if ret is not None else ""
 
     def read(self, context: Context = None) -> Optional[Any]:
@@ -35,6 +34,16 @@ class InputUnit(ABC):
         Read the raw value. If the value is not set, return None
         """
         raise NotImplementedError()
+
+    def _normalize_read_value(self, read_value):
+        """
+        Normalize the read value
+        """
+        if read_value is not None:
+            return read_value
+        if self.format.defaults is not None:
+            return _normalize_defaults(self.format.defaults)
+        return None
 
     @property
     def id(self):
@@ -75,6 +84,6 @@ class IOUnit(InputUnit, OutputUnit):
         if self.format.defaults is None:
             return
 
-        value = self.read()
+        value = self._read()
         if value is None:
             self.write(_normalize_defaults(self.format.defaults))

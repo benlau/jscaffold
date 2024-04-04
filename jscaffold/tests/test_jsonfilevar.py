@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from jscaffold.iounit.jsonfilevar import JsonFileVar
 from tempfile import NamedTemporaryFile
 import json
@@ -31,7 +32,7 @@ def test_jsonfilevar_read_boolean_from_file():
 
 def test_jsonfilevar_write_to_file():
     source = write_to_tmp({"A": {"B": {"C": "value"}}})
-    variable = JsonFileVar("A.B.C", source, indent=4)
+    variable = JsonFileVar("A.B.C", source).indent(4)
     variable.write("new_value")
 
     with open(source, "r") as file:
@@ -46,3 +47,23 @@ def test_jsonfilevar_write_to_file():
             }
         }"""
         )
+
+
+@patch("builtins.open")
+def test_jsonfilevar_str_reader(mock_open):
+    json_str = '{"A": {"B": {"C": "value"}}}'
+    mock_open.return_value.__enter__().read.return_value = json_str
+    var = JsonFileVar("C", "mock-file").reader("A.B.C")
+    assert var.value == "value"
+
+
+@patch("builtins.open")
+def test_jsonfilevar_func_reader(mock_open):
+    json_str = '{"A": {"B": {"C": "value"}}}'
+    mock_open.return_value.__enter__().read.return_value = json_str
+
+    def query(dict):
+        return dict["A"]["B"]["C"]
+
+    var = JsonFileVar("C", "mock-file").reader(query)
+    assert var.value == "value"

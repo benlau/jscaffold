@@ -47,3 +47,6 @@ def test_multiline():
 def test_select():
     var = EnvVar("VAR1").select("a", "b", "c")
     assert var.format.select == ["a", "b", "c"]
+
+    var = EnvVar("VAR1").select(["a", "b", "c"])
+    assert var.format.select == ["a", "b", "c"]

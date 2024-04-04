@@ -51,7 +51,13 @@ class ScaffoldVar(IOUnit):
         self,
         *args: Optional[List[str]],
     ):
-        self.format.select = list(args)
+        res = []
+        for arg in args:
+            if isinstance(arg, list):
+                res += arg
+            else:
+                res.append(arg)
+        self.format.select = res
         return self
 
     def upload_file(self, folder: str = None, mkdir: bool = False):

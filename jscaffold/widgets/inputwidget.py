@@ -1,5 +1,6 @@
 from enum import Enum
 from jscaffold.iounit.iounit import InputUnit
+from jscaffold.services.tkservice import ask_open_file
 from ipywidgets import widgets
 import tempfile
 import os
@@ -134,6 +135,39 @@ class FileUploadInputWidget(InputWidget):
                 text_box.value = abs_path
 
         uploader.observe(on_upload_change, names="value")
+
+    @property
+    def value(self):
+        return self.text_box.value
+
+    @value.setter
+    def value(self, value):
+        self.text_box.value = value
+
+
+class LocalPathInputWidget(InputWidget):
+    def __init__(self, input: InputUnit):
+        def on_click(_):
+            self.browser_button.disabled = True
+            file_path = ask_open_file()
+            self.browser_button.disabled = False
+            if file_path == "":
+                return
+            text_box.value = file_path
+
+        super().__init__(InputWidgetType.UploadFile.value)
+        value = input.read()
+        placeholder = input._query_defaults()
+        if placeholder is None:
+            placeholder = ""
+        text_box = widgets.Text(
+            value=value, layout=widgets.Layout(width="300px"), placeholder=placeholder
+        )
+        browse_button = widgets.Button(description="Browse")
+        self.text_box = text_box
+        self.browser_button = browse_button
+        self.widget = widgets.HBox([text_box, browse_button])
+        browse_button.on_click(on_click)
 
     @property
     def value(self):

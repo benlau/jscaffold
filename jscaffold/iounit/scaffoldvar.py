@@ -66,3 +66,8 @@ class ScaffoldVar(IOUnit):
         self.format.upload_folder = folder
         self.format.mkdir = mkdir
         return self
+
+    def local_path(self):
+        self.format.type = FormatType.File.value
+        self.format.file_source = FileSource.Local.value
+        return self

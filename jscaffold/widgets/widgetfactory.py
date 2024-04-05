@@ -1,6 +1,7 @@
 from ipywidgets import widgets
 from jscaffold.iounit.format import FileSource, Format, FormatType
 from jscaffold.widgets.inputwidget import (
+    LocalPathInputWidget,
     SelectInputWidget,
     FileUploadInputWidget,
     TextAreaInputWidget,
@@ -15,6 +16,7 @@ class InputWidgetType(Enum):
     Select = "select"
     Textarea = "textarea"
     FileUpload = "file_upload"
+    LocalPath = "local_path"
 
 
 class WidgetWrapper:
@@ -85,6 +87,11 @@ class WidgetFactory:
             and format.file_source == FileSource.Upload.value
         ):
             return InputWidgetType.FileUpload
+        if (
+            format.type == FormatType.File.value
+            and format.file_source == FileSource.Local.value
+        ):
+            return InputWidgetType.LocalPath
         if input is not None and isinstance(format.select, list):
             return InputWidgetType.Select
         if format.multiline is True or (
@@ -103,8 +110,10 @@ class WidgetFactory:
             return TextAreaInputWidget(input)
         elif input_widget_type == InputWidgetType.FileUpload:
             return FileUploadInputWidget(input)
-        else:
-            return TextInputWidget(input)
+        elif input_widget_type == InputWidgetType.LocalPath:
+            return LocalPathInputWidget(input)
+
+        return TextInputWidget(input)
 
     def create_submit_area(self, _output, on_submit, default_label="Submit"):
         # TODO - Handle multiple actions

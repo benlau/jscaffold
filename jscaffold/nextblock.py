@@ -1,4 +1,4 @@
-from jscaffold.decorators import preset_iot_class_method
+from jscaffold.decorators.iot import preset_iot_class_method
 from .context import Context
 from .iounit.iounit import OutputUnit
 from .block import Block

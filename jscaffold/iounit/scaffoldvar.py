@@ -1,3 +1,4 @@
+from contextvars import Context
 from typing import List, Optional, Union
 from .iounit import IOUnit
 from .format import FileSource, FormatType, Format
@@ -21,6 +22,11 @@ class ScaffoldVar(IOUnit):
             return defaults[0]
 
         return None
+
+    def write(self, value=None, context: Context = None):
+        super().write(value, context=context)
+        self._has_cached_value = True
+        self._cached_value = value
 
     def refresh(self, context=None):
         self._has_cached_value = True

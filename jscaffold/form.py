@@ -1,4 +1,4 @@
-from jscaffold.decorators import preset_iot
+from jscaffold.decorators.iot import preset_iot
 from jscaffold.panel.configpanel import ConfigPanel
 
 

@@ -15,6 +15,18 @@ def test_value_default():
     assert var.value == "default"
 
 
+def test_write():
+    """
+    It should update the cached value
+    """
+    key = str(uuid.uuid4())
+    var = EnvVar(key).defaults("V1")
+    assert var.value == "V1"
+
+    var.write("V2")
+    assert var.value == "V2"
+
+
 def test_refresh():
     var = EnvVar("VAR1")
     os.environ["VAR1"] = "random-value-in-test-value"

@@ -2,7 +2,7 @@ from jscaffold.services.changedispatcher import (
     change_dispatcher,
     Listener,
 )
-from ..decorators import preset_iot_class_method
+from jscaffold.decorators.iot import preset_iot_class_method
 from ipywidgets import widgets
 from ..widgets.widgetfactory import WidgetFactory
 from ..processor import Processor

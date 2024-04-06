@@ -1,5 +1,5 @@
 from jscaffold.doublebufferoutput import DoubleBufferOutput
-from jscaffold.decorators import preset_iot_class_method
+from jscaffold.decorators.iot import preset_iot_class_method
 from .interfacebuilder import InterfaceBuilder
 from .columnflow import ColumnFlow
 from .context import Context

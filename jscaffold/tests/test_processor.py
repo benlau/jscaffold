@@ -1,9 +1,11 @@
 from jscaffold.iounit.envfilevar import EnvFileVar
+from jscaffold.iounit.envvar import EnvVar
 from jscaffold.processor import Processor
 from unittest.mock import MagicMock
 import asyncio
 import pytest
 from tempfile import NamedTemporaryFile
+import os
 
 
 @pytest.mark.asyncio
@@ -21,7 +23,7 @@ async def test_processor_execute_list():
     callback = MagicMock()
 
     processor = Processor()
-    await processor("input", [callback, callback], MagicMock())
+    await processor(EnvVar("VAR1"), [callback, callback], "input")
 
     assert callback.call_count == 2
 
@@ -30,7 +32,7 @@ def test_processor_create_task():
     output = MagicMock()
     processor = Processor()
     done = MagicMock()
-    task = processor.create_task("input", output, MagicMock())
+    task = processor.create_task(EnvVar("VAR1"), output, "input")
     task.add_done_callback(done)
     loop = asyncio.get_event_loop()
     loop.run_until_complete(task)
@@ -38,13 +40,13 @@ def test_processor_create_task():
 
 
 def test_processor_run_script():
-    output = """echo 123"""
+    output = """echo Hello"""
     context = MagicMock()
     processor = Processor(context)
-    task = processor.create_task(None, output, MagicMock())
+    task = processor.create_task(None, output, None)
     loop = asyncio.get_event_loop()
     loop.run_until_complete(task)
-    context.print.assert_called_once_with("123\n")
+    context.print.assert_called_once_with("Hello\n")
 
 
 @pytest.mark.asyncio
@@ -58,6 +60,21 @@ async def test_processor_run_script_pass_variable():
     var.write("123")
 
     await processor(var, output, var.value)
+    context.print.assert_called_once_with("123\n")
+
+
+@pytest.mark.asyncio
+async def test_processor_run_script_pass_variable_from_value():
+    """
+    It should pass the value to the script instead of reading
+    from input
+    """
+    os.environ["VAR1"] = ""
+    output = """echo $VAR1"""
+    context = MagicMock()
+    processor = Processor(context)
+    var = EnvVar("VAR1")
+    await processor(var, output, "123")
     context.print.assert_called_once_with("123\n")
 
 

@@ -19,21 +19,28 @@ class Processor:
             self.context.clear_output()
 
         outputs = [output] if not isinstance(output, list) else output
-        inputs = [input] if not isinstance(input, list) else input
-        inputs = [input for input in inputs if input is not None]
+
+        if input is None:
+            inputs = []
+            values = []
+        else:
+            inputs = [input] if not isinstance(input, list) else input
+            values = [value] if not isinstance(value, list) else value
+
+        env = dict(
+            [
+                (
+                    i.key,
+                    str(v) if v is not None else "",
+                )
+                for (i, v) in zip(inputs, values)
+            ]
+        )
+
         for target in outputs:
             try:
                 if isinstance(target, str):
                     script = target
-                    env = dict(
-                        [
-                            (
-                                input.key,
-                                str(input.value) if input.value is not None else "",
-                            )
-                            for input in inputs
-                        ]
-                    )
                     run_task = RunTask()
                     run_task.script = script
                     await run_task(print=self.context.print, env=env)

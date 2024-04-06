@@ -4,3 +4,4 @@ from .columnflow import *
 from .scaffold import *
 from .nextblock import *
 from .panel import *
+from .form import *

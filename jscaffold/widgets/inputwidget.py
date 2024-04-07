@@ -1,6 +1,6 @@
 from enum import Enum
 from jscaffold.iounit.iounit import InputUnit
-from jscaffold.services.tkservice import ask_open_file
+from jscaffold.services.tkservice import tk_serivce
 from ipywidgets import widgets
 import tempfile
 import os
@@ -149,7 +149,7 @@ class LocalPathInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
         def on_click(_):
             self.browser_button.disabled = True
-            file_path = ask_open_file()
+            file_path = tk_serivce.open_file_dialog(input.format.file_type)
             self.browser_button.disabled = False
             if file_path == "":
                 return

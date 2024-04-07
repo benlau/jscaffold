@@ -1,7 +1,7 @@
 from contextvars import Context
 from typing import List, Optional, Union
 from .iounit import IOUnit
-from .format import FileSource, FormatType, Format
+from .format import FileSource, FileType, FormatType, Format
 
 
 class ScaffoldVar(IOUnit):
@@ -73,7 +73,8 @@ class ScaffoldVar(IOUnit):
         self.format.mkdir = mkdir
         return self
 
-    def local_path(self):
+    def local_path(self, file_type=FileType.File.value):
         self.format.type = FormatType.File.value
         self.format.file_source = FileSource.Local.value
+        self.format.file_type = file_type
         return self

@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from contextvars import Context
 from typing import List, Optional, Union
 from .iounit import IOUnit
@@ -78,3 +79,20 @@ class ScaffoldVar(IOUnit):
         self.format.file_source = FileSource.Local.value
         self.format.file_type = file_type
         return self
+
+
+class SourceMixin:
+    @classmethod
+    @contextmanager
+    def source(cls, filename: str):
+        class Source:
+            def __init__(self):
+                self.filename = filename
+
+            def __call__(self, key):
+                return self.var(key)
+
+            def var(self, key):
+                return cls(key, self.filename)
+
+        yield Source()

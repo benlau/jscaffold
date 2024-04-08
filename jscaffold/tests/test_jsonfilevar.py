@@ -76,3 +76,12 @@ def test_jsonfilevar_func_path(mock_open):
 
     var = JsonFileVar("C", "mock-file").path("A.B.C")
     assert var.value == "value"
+
+
+def test_source():
+    with JsonFileVar.source("config.json") as source:
+        var1 = source.var("A")
+        assert var1.filename == "config.json"
+
+        var2 = source("B")
+        assert var2.filename == "config.json"

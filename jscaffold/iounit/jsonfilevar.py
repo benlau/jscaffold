@@ -1,10 +1,10 @@
 from jscaffold.patchers.dict import PatchDict
-from .scaffoldvar import ScaffoldVar
+from .scaffoldvar import ScaffoldVar, SourceMixin
 from collections import OrderedDict
 import json
 
 
-class JsonFileVar(ScaffoldVar):
+class JsonFileVar(ScaffoldVar, SourceMixin):
     class State:
         def __init__(self):
             self.key = None

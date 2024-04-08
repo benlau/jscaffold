@@ -1,8 +1,8 @@
 from jscaffold.patchers.assign import PatchAssignment
-from .scaffoldvar import ScaffoldVar
+from .scaffoldvar import ScaffoldVar, SourceMixin
 
 
-class EnvFileVar(ScaffoldVar):
+class EnvFileVar(ScaffoldVar, SourceMixin):
     def __init__(self, key, filename):
         super().__init__()
         self.filename = filename

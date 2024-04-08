@@ -25,3 +25,12 @@ def test_envfile_var_write_not_existed_file():
     content = file.read()
 
     assert content == "\nA=value"
+
+
+def test_source():
+    with EnvFileVar.source("config.env") as source:
+        var1 = source.var("A")
+        assert var1.filename == "config.env"
+
+        var2 = source("B")
+        assert var2.filename == "config.env"

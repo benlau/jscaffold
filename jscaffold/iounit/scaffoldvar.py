@@ -3,6 +3,7 @@ from contextvars import Context
 from typing import List, Optional, Union
 from .iounit import IOUnit
 from .format import FileSource, FileType, FormatType, Format
+import copy
 
 
 class ScaffoldVar(IOUnit):
@@ -10,6 +11,9 @@ class ScaffoldVar(IOUnit):
         self.format = Format()
         self._has_cached_value = False
         self._cached_value = None
+
+    def copy(self):
+        return copy.deepcopy(self)
 
     def validate(self, value=None, defaults=None):
         if value is not None:

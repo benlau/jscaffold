@@ -3,7 +3,6 @@ from jscaffold.layout.singlevaluelayout import SingleValueLayout
 from jscaffold.layout.formlayout import FormLayout
 from jscaffold.decorators.iot import preset_iot_class_method
 from IPython.display import display
-from jscaffold.views.logger import Logger
 from jscaffold.views.logview.logview import LogViewWidget
 from ipywidgets import widgets
 

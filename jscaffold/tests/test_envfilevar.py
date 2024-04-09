@@ -34,3 +34,16 @@ def test_source():
 
         var2 = source("B")
         assert var2.filename == "config.env"
+
+
+def test_copy():
+    a = EnvFileVar("A", "config.env")
+    a.defaults("default")
+    b = a.copy()
+
+    assert b.key == "A"
+    assert b.filename == "config.env"
+    assert b.format.defaults == "default"
+
+    b.defaults("new_default")
+    assert a.format.defaults == "default"

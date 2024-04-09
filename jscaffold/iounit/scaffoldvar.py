@@ -80,6 +80,10 @@ class ScaffoldVar(IOUnit):
         self.format.file_type = file_type
         return self
 
+    def readonly(self, value=True):
+        self.format.readonly = value
+        return self
+
 
 class SourceMixin:
     @classmethod

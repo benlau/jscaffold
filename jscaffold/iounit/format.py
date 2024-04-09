@@ -22,6 +22,7 @@ class Format:
         self,
         type=FormatType.Text.value,
         defaults: Any = None,
+        readonly: bool = False,
         # For text
         multiline: Optional[Union[bool, int]] = False,
         select: Optional[List[str]] = None,
@@ -32,6 +33,7 @@ class Format:
         file_type: FileType = FileType.File,
     ):
         self.type = type
+        self.readonly = readonly
         self.defaults = defaults
 
         self.multiline = multiline

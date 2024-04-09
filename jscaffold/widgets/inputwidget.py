@@ -36,11 +36,17 @@ class TextInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
         super().__init__(InputWidgetType.Text.value)
         value = input.read() if input is not None else None
+        format = input.format
         placeholder = input._query_defaults()
         if placeholder is None:
             placeholder = ""
         layout = widgets.Layout(width="360px")
-        text_widget = widgets.Text(value=value, layout=layout, placeholder=placeholder)
+        text_widget = widgets.Text(
+            value=value,
+            layout=layout,
+            placeholder=placeholder,
+            disabled=format.readonly,
+        )
         self.widget = text_widget
 
     @property
@@ -58,15 +64,24 @@ DEFAULT_ROW_COUNT = 5
 class TextAreaInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
         super().__init__(InputWidgetType.Textarea.value)
-        value = str(input) if input is not None else None
-
+        value = input.read()
+        placeholder = input._query_defaults()
+        if placeholder is None:
+            placeholder = ""
+        format = input.format
         rows = (
             format.multiline
             if not isinstance(format.multiline, bool)
             else DEFAULT_ROW_COUNT
         )
-
-        textarea = widgets.Textarea(value=value, rows=rows)
+        layout = widgets.Layout(width="360px")
+        textarea = widgets.Textarea(
+            value=value,
+            rows=rows,
+            placeholder=placeholder,
+            layout=layout,
+            disabled=format.readonly,
+        )
         self.widget = textarea
 
     @property
@@ -81,7 +96,7 @@ class TextAreaInputWidget(InputWidget):
 class SelectInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
         super().__init__(InputWidgetType.Select.value)
-        value = str(input) if input is not None else None
+        value = input.read()
         format = input.format
         self.format = format
         if value not in format.select:
@@ -89,7 +104,9 @@ class SelectInputWidget(InputWidget):
                 value = input.defaults
             else:
                 value = None
-        select_widget = widgets.Select(options=format.select, value=value)
+        select_widget = widgets.Select(
+            options=format.select, value=value, disabled=format.readonly
+        )
         self.widget = select_widget
 
     @property
@@ -109,7 +126,9 @@ class FileUploadInputWidget(InputWidget):
         value = str(input) if input is not None else None
 
         format = input.format
-        text_box = widgets.Text(value=value, layout=widgets.Layout(width="300px"))
+        text_box = widgets.Text(
+            value=value, layout=widgets.Layout(width="300px"), disabled=format.readonly
+        )
         uploader = widgets.FileUpload(multiple=False)
         self.text_box = text_box
         self.widget = widgets.HBox([text_box, uploader])
@@ -161,9 +180,12 @@ class LocalPathInputWidget(InputWidget):
         if placeholder is None:
             placeholder = ""
         text_box = widgets.Text(
-            value=value, layout=widgets.Layout(width="300px"), placeholder=placeholder
+            value=value,
+            layout=widgets.Layout(width="300px"),
+            placeholder=placeholder,
+            disabled=format.readonly,
         )
-        browse_button = widgets.Button(description="Browse")
+        browse_button = widgets.Button(description="Browse", disabled=format.readonly)
         self.text_box = text_box
         self.browser_button = browse_button
         self.widget = widgets.HBox([text_box, browse_button])

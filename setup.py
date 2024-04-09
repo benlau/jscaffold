@@ -38,7 +38,7 @@ setup_args = dict(
     ],
     include_package_data=True,
     python_requires=">=3.6",
-    install_requires=["ipywidgets>=7.0.0"],
+    install_requires=["ipywidgets>=7.0.0", "anywidget>=0.9.6"],
     extras_require={
         "test": [
             "pytest>=4.6",

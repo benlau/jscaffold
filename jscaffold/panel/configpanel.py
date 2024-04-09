@@ -4,6 +4,7 @@ from jscaffold.layout.formlayout import FormLayout
 from jscaffold.decorators.iot import preset_iot_class_method
 from IPython.display import display
 from jscaffold.views.logger import Logger
+from jscaffold.views.logview.logview import LogViewWidget
 from ipywidgets import widgets
 
 
@@ -41,7 +42,7 @@ class ConfigPanel:
         self.state.instant_write = instant_write
 
         if self.logger is None:
-            self.logger = Logger()
+            self.logger = LogViewWidget()
 
         if self.context is None:
             self.context = Context(
@@ -76,7 +77,7 @@ class ConfigPanel:
             )
         self.layout = layout
 
-        self.widget = widgets.VBox([self.layout.widget, self.logger.widget])
+        self.widget = widgets.VBox([self.layout.widget, self.logger])
 
     def update_widget(self):
         self.layout.title(self.state.title).action_label(self.state.action_label)

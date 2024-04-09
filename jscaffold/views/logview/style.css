@@ -1,0 +1,40 @@
+.jscaffold-logview {
+    border: 1px solid #bfbfbf; 
+    min-height: 80px;
+    max-height: 120px;
+    word-break: break-all;
+    width: 100%;
+    max-width: 100%;
+    margin-right: 10px;
+    overflow: auto;
+}
+
+.jscaffold-logview pre {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: auto;
+}
+
+.jscaffold-logview-copy-button:hover {
+    opacity: 0.5;
+}
+
+.jscaffold-logview-copy-button:active {
+    opacity: 0.8;
+}
+
+.jscaffold-logview-copy-button {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    border: 1px solid #bfbfbf;
+    display: block;
+    border: 1px solid #bfbfbf;
+    padding: 2px 4px;
+    user-select: none;
+    background-color: white;
+};

@@ -53,7 +53,9 @@ class Logger:
 <div class="{container_class_name}">
     <style>
     .{container_class_name} {{
-        border: 1px solid #bfbfbf; padding: 4px 4px;min-height: 80px;
+        border: 1px solid #bfbfbf; min-height: 80px; overflow-wrap: anywhere;
+        width: 100%;
+        max-width: 100%;
     }}
     .{copy_button_class_name}:hover {{
         opacity: 0.5;

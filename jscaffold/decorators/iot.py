@@ -1,3 +1,4 @@
+from jscaffold.iounit.applytosource import ApplyToSource
 from jscaffold.iounit.sharedstoragevar import SharedStorageVar
 from jscaffold.utils import inspect_arg_name
 
@@ -9,8 +10,8 @@ def _normalize_input(input):
 
 
 def _setup_iot(input, output, title):
-    if output is None and not isinstance(input, list):
-        output = input
+    if output is None:
+        output = ApplyToSource()
 
     if isinstance(input, list):
         input = [_normalize_input(i) for i in input]

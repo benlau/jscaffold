@@ -1,4 +1,4 @@
-from .iounit import OutputUnit
+from .iounit import InputUnit, OutputUnit
 
 
 class ApplyToSource(OutputUnit):
@@ -18,4 +18,8 @@ class ApplyToSource(OutputUnit):
 
         for index, value in enumerate(values):
             source = sources[index]
-            source.write(value, context)
+            if isinstance(source, InputUnit):
+                if source.format.readonly:
+                    continue
+            if isinstance(source, OutputUnit):
+                source.write(value, context)

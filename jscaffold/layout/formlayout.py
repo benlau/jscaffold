@@ -1,5 +1,4 @@
 from typing import List
-from jscaffold.iounit.applytosource import ApplyToSource
 from jscaffold.processor import Processor
 from jscaffold.services.changedispatcher import (
     Listener,
@@ -36,8 +35,6 @@ class FormLayout:
             self.input = input
         else:
             self.input = [input]
-        if output is None:
-            output = ApplyToSource()
         self.output = output
         self.input_widgets = []
         self.context = context

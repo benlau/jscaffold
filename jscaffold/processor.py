@@ -1,4 +1,5 @@
 from jscaffold.task.runtask import RunTask
+from jscaffold.iounit.applytosource import ApplyToSource
 import asyncio
 from inspect import signature
 
@@ -18,7 +19,10 @@ class Processor:
         if self.context is not None:
             self.context.clear_output()
 
-        outputs = [output] if not isinstance(output, list) else output
+        outputs = [output] if not isinstance(output, list) else output[:]
+
+        if self.context is not None and self.context.save_changes is True:
+            outputs.insert(0, ApplyToSource())
 
         if input is None:
             inputs = []

@@ -1,3 +1,4 @@
+import uuid
 from jscaffold.iounit.envfilevar import EnvFileVar
 from jscaffold.iounit.envvar import EnvVar
 from jscaffold.processor import Processor
@@ -91,3 +92,24 @@ async def test_processor_throw_exception():
     processor = Processor(context)
     await processor(None, callback, context)
     context.print.assert_called_once_with("Error")
+
+
+@pytest.mark.asyncio
+async def test_processor_add_apply_to_source():
+    """
+    It should add the apply method to the source
+    if save_changes was set in context
+    """
+    key = str(uuid.uuid4())
+    var = EnvVar(key)
+    context = MagicMock()
+    context.save_changes = False
+    context.input = var
+    processor = Processor(context)
+    await processor(var, None, "123")
+    assert os.environ.get(key) is None
+
+    context.save_changes = True
+    processor = Processor(context)
+    await processor(var, None, "123")
+    assert os.environ.get(key) == "123"

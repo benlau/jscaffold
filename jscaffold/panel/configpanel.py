@@ -19,6 +19,7 @@ class ConfigPanel:
             self.instant_write = False
             self.title = None
             self.action_label = "Confirm"
+            self.save_changes = True
 
     @preset_iot_class_method
     def __init__(
@@ -102,4 +103,8 @@ class ConfigPanel:
     def action_label(self, new_label: str):
         self.state.action_label = new_label
         self.update_widget()
+        return self
+
+    def save_changes(self, value):
+        self.context.save_changes = value
         return self

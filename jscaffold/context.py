@@ -9,12 +9,14 @@ class Context:
         print=None,
         clear_output=None,
         processor=None,
+        save_changes=True,
     ):
         self.current_block_index = current_block_index
         # Shared storage between input and output
         self.shared_storage = shared_storage
         self.input = input
         self.output = output
+        self.save_changes = save_changes
         self.main_layout = main_layout
 
         # For reporting the progress

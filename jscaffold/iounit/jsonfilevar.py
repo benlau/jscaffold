@@ -48,7 +48,9 @@ class JsonFileVar(ScaffoldVar, SourceMixin):
         file.close()
 
         if context is not None and context.print is not None:
-            context.print(f"Set {self.key}={value} to {self.filename}\n")
+            context.print(
+                f"Set {self.key}={self._format_display_value(value)} to {self.filename}\n"
+            )
 
     def _read(self, context=None):
         content = self._read_json_from_file()

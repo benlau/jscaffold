@@ -26,6 +26,7 @@ class Format:
         # For text
         multiline: Optional[Union[bool, int]] = False,
         select: Optional[List[str]] = None,
+        password: bool = False,
         # For file
         mkdir: bool = True,
         file_source: FileSource = None,
@@ -35,6 +36,7 @@ class Format:
         self.type = type
         self.readonly = readonly
         self.defaults = defaults
+        self.password = password
 
         self.multiline = multiline
         self.select = select

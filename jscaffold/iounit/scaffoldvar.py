@@ -50,6 +50,11 @@ class ScaffoldVar(IOUnit):
             self.refresh()
         return self._cached_value
 
+    def _format_display_value(self, value):
+        if self.format.password is True:
+            return "*********"
+        return value if value is not None else ""
+
     def defaults(self, value):
         self.format.defaults = value
         return self
@@ -86,6 +91,10 @@ class ScaffoldVar(IOUnit):
 
     def readonly(self, value=True):
         self.format.readonly = value
+        return self
+
+    def password(self, value=True):
+        self.format.password = value
         return self
 
 

@@ -37,16 +37,25 @@ class TextInputWidget(InputWidget):
         super().__init__(InputWidgetType.Text.value)
         value = input.read() if input is not None else None
         format = input.format
+        password = format.password
         placeholder = input._query_defaults()
         if placeholder is None:
             placeholder = ""
         layout = widgets.Layout(width="360px")
-        text_widget = widgets.Text(
-            value=value,
-            layout=layout,
-            placeholder=placeholder,
-            disabled=format.readonly,
-        )
+        if password is True:
+            text_widget = widgets.Password(
+                value=value,
+                layout=layout,
+                placeholder=placeholder,
+                disabled=format.readonly,
+            )
+        else:
+            text_widget = widgets.Text(
+                value=value,
+                layout=layout,
+                placeholder=placeholder,
+                disabled=format.readonly,
+            )
         self.widget = text_widget
 
     @property

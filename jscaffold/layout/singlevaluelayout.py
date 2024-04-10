@@ -72,7 +72,7 @@ class SingleValueLayout:
             task.add_done_callback(lambda _: enable())
 
         # TODO: Update title style
-        self.title_widget = widgets.Label(value=self.state.title)
+        self.title_widget = widgets.HTML(value=self.state.title)
         layout.append(self.title_widget)
 
         if self.input is None:

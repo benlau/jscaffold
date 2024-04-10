@@ -51,7 +51,7 @@ class FormLayout:
         output_widget = DoubleBufferOutput()
 
         layout = []
-        self.title_widget = widgets.Label()
+        self.title_widget = widgets.HTML()
         layout.append(self.title_widget)
 
         grid = widgets.GridspecLayout(len(self.input), 2)

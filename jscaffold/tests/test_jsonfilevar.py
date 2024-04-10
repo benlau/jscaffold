@@ -79,9 +79,11 @@ def test_jsonfilevar_func_path(mock_open):
 
 
 def test_source():
-    with JsonFileVar.source("config.json") as source:
+    with JsonFileVar.source("config.json", indent=7) as source:
         var1 = source.var("A")
         assert var1.filename == "config.json"
+        assert var1.state.indent == 7
 
         var2 = source("B")
         assert var2.filename == "config.json"
+        assert var2.state.indent == 7

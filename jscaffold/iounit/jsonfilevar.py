@@ -1,10 +1,11 @@
 from jscaffold.patchers.dict import PatchDict
-from .scaffoldvar import ScaffoldVar, SourceMixin
+from .scaffoldvar import ScaffoldVar
+from contextlib import contextmanager
 from collections import OrderedDict
 import json
 
 
-class JsonFileVar(ScaffoldVar, SourceMixin):
+class JsonFileVar(ScaffoldVar):
     class State:
         def __init__(self):
             self.key = None
@@ -76,3 +77,21 @@ class JsonFileVar(ScaffoldVar, SourceMixin):
             return json_content
         except FileNotFoundError:
             return None
+
+    @classmethod
+    @contextmanager
+    def source(cls, filename: str, indent=None):
+        class Source:
+            def __init__(self):
+                self.filename = filename
+                self.indent = indent
+
+            def __call__(self, key):
+                return self.var(key)
+
+            def var(self, key):
+                ret = cls(key, self.filename)
+                ret.state.indent = self.indent
+                return ret
+
+        yield Source()

@@ -1,4 +1,4 @@
-from jscaffold.panel.configpanel import ConfigPanel
+from jscaffold.panel.formpanel import FormPanel
 
 
 def test_no_input():
@@ -7,4 +7,4 @@ def test_no_input():
     """
 
     script = "ls"
-    ConfigPanel(output=script)
+    FormPanel(output=script)

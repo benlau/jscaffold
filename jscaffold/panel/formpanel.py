@@ -7,7 +7,7 @@ from jscaffold.views.logview.logview import LogViewWidget
 from ipywidgets import widgets
 
 
-class ConfigPanel:
+class FormPanel:
     class State:
         """
         The State object hold the properties
@@ -37,7 +37,7 @@ class ConfigPanel:
         self.context = context
         self.logger = logger
         self.is_setup_completed = False
-        self.state = ConfigPanel.State()
+        self.state = FormPanel.State()
         self.state.title = title
         self.state.instant_write = instant_write
 

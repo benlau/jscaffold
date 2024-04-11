@@ -185,6 +185,7 @@ class LocalPathInputWidget(InputWidget):
 
         super().__init__(InputWidgetType.UploadFile.value)
         value = input.read()
+        format = input.format
         placeholder = input._query_defaults()
         if placeholder is None:
             placeholder = ""

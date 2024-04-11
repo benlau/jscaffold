@@ -38,7 +38,7 @@ class ScaffoldVar(IOUnit, Formattable):
         return self
 
     def update(self, value, context=None):
-        self._write(value, context=context)
+        self.write(value, context=context)
         self._has_cached_value = True
         self._cached_value = value
         return self

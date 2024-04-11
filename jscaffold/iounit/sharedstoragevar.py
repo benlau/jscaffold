@@ -1,9 +1,9 @@
-from .scaffoldvar import ScaffoldVar
+from .variable import Variable
 from ..context import Context
 from jscaffold.services.sharedstorage import SharedStorage, shared_storage
 
 
-class SharedStorageVar(ScaffoldVar):
+class SharedStorageVar(Variable):
     def __init__(self, key, shared_storage: SharedStorage = shared_storage):
         super().__init__()
         self._key = key

@@ -5,7 +5,7 @@ from jscaffold.services.changedispatcher import (
     change_dispatcher,
 )
 import ipywidgets as widgets
-from jscaffold.iounit.scaffoldvar import ScaffoldVar
+from jscaffold.iounit.variable import Variable
 from ..doublebufferoutput import DoubleBufferOutput
 from ..widgets.widgetfactory import WidgetFactory
 
@@ -25,7 +25,7 @@ class FormLayout:
 
     def __init__(
         self,
-        input: List[ScaffoldVar],
+        input: List[Variable],
         output=None,
         title="Form",
         context=None,

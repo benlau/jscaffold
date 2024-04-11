@@ -5,7 +5,7 @@ from .format import Format, Formattable
 import copy
 
 
-class ScaffoldVar(IOUnit, Formattable):
+class Variable(IOUnit, Formattable):
     def __init__(self):
         self.format = Format()
         self._has_cached_value = False

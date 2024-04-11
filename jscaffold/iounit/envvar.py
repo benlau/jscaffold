@@ -1,9 +1,9 @@
 import os
-from .scaffoldvar import ScaffoldVar
+from .variable import Variable
 from ..context import Context
 
 
-class EnvVar(ScaffoldVar):
+class EnvVar(Variable):
     """
     Wrapper for environment variable
     """

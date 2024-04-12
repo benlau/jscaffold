@@ -23,6 +23,14 @@ def test_envvar_write_without_value():
     assert os.getenv(name) == "default"
 
 
+def test_envvar_write_none():
+    var = EnvVar("var1")
+    var.write("test")
+    var.write(None)
+
+    assert os.getenv("var1", None) is None
+
+
 def test_if_none_write_defaults():
     name = "5b690270-59c0-11ee-8c99-0242ac120002 "
     var = EnvVar(name).defaults("default")

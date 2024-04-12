@@ -24,3 +24,7 @@ lint:
 .PHONY: lint-fix
 lint-fix:
 	black jscaffold
+
+.PHONY: install-local
+install-local:
+	pip install -e ".[test, examples, playground]"

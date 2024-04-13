@@ -49,11 +49,12 @@ class Processor:
                     run_task.script = script
                     await run_task(print=self.context.print, env=env)
                 elif callable(target):
-                    sig = signature(target)
-                    arg_count = len(sig.parameters)
+                    self.invoke(target, value, self.context)
+                    # sig = signature(target)
+                    # arg_count = len(sig.parameters)
 
-                    args = [value, self.context][:arg_count]
-                    target(*args)
+                    # args = [value, self.context][:arg_count]
+                    # target(*args)
             except Exception as e:
                 if self.context is not None:
                     self.context.print(str(e))
@@ -63,3 +64,15 @@ class Processor:
             return await self.process(input, output, value)
 
         return asyncio.get_event_loop().create_task(run())
+
+    def invoke(self, callable, value, context):
+        sig = signature(callable)
+        args = {}
+        for key in dir(context):
+            if key in sig.parameters:
+                args[key] = getattr(context, key)
+        if "value" in sig.parameters:
+            args["value"] = value
+        if "context" in sig.parameters:
+            args["context"] = context
+        return callable(**args)

@@ -1,4 +1,5 @@
 import uuid
+from jscaffold.context import Context
 from jscaffold.iounit.envfilevar import EnvFileVar
 from jscaffold.iounit.envvar import EnvVar
 from jscaffold.processor import Processor
@@ -113,3 +114,18 @@ async def test_processor_add_apply_to_source():
     processor = Processor(context)
     await processor(var, None, "123")
     assert os.environ.get(key) == "123"
+
+
+def test_processor_invoke():
+    context = Context()
+    process = Processor(context)
+    is_called = False
+
+    def callback(print, value):
+        nonlocal is_called
+        is_called = True
+        assert value == "value"
+        assert print == context.print
+
+    process.invoke(callback, "value", context)
+    assert is_called is True

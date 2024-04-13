@@ -67,7 +67,7 @@ class FormLayout:
                     if widget.value != value:
                         widget.value = value
                 except Exception as e:
-                    self.context.print(str(e))
+                    self.context.log(str(e))
                     raise e
 
             listener = Listener(id, on_change)

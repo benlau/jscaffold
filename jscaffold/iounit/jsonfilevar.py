@@ -48,8 +48,8 @@ class JsonFileVar(Variable):
         file.write(json.dumps(new_content, indent=self.state.indent))
         file.close()
 
-        if context is not None and context.print is not None:
-            context.print(
+        if context is not None and context.log is not None:
+            context.log(
                 f"Set {self.key}={self._format_display_value(value)} to {self.filename}\n"
             )
 

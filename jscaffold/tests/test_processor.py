@@ -48,7 +48,7 @@ def test_processor_run_script():
     task = processor.create_task(None, output, None)
     loop = asyncio.get_event_loop()
     loop.run_until_complete(task)
-    context.print.assert_called_once_with("Hello\n")
+    context.log.assert_called_once_with("Hello\n")
 
 
 @pytest.mark.asyncio
@@ -62,7 +62,7 @@ async def test_processor_run_script_pass_variable():
     var.write("123")
 
     await processor(var, output, var.value)
-    context.print.assert_called_once_with("123\n")
+    context.log.assert_called_once_with("123\n")
 
 
 @pytest.mark.asyncio
@@ -77,13 +77,13 @@ async def test_processor_run_script_pass_variable_from_value():
     processor = Processor(context)
     var = EnvVar("VAR1")
     await processor(var, output, "123")
-    context.print.assert_called_once_with("123\n")
+    context.log.assert_called_once_with("123\n")
 
 
 @pytest.mark.asyncio
 async def test_processor_throw_exception():
     """
-    It should write the error message to context.print
+    It should write the error message to context.log
     """
 
     def callback():
@@ -92,7 +92,7 @@ async def test_processor_throw_exception():
     context = MagicMock()
     processor = Processor(context)
     await processor(None, callback, context)
-    context.print.assert_called_once_with("Error")
+    context.log.assert_called_once_with("Error")
 
 
 @pytest.mark.asyncio
@@ -121,11 +121,11 @@ def test_processor_invoke():
     process = Processor(context)
     is_called = False
 
-    def callback(print, value):
+    def callback(log, value):
         nonlocal is_called
         is_called = True
         assert value == "value"
-        assert print == context.print
+        assert log == context.log
 
     process.invoke(callback, "value", context)
     assert is_called is True

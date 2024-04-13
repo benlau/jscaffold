@@ -47,7 +47,7 @@ class Processor:
                     script = target
                     run_task = RunTask()
                     run_task.script = script
-                    await run_task(print=self.context.print, env=env)
+                    await run_task(print=self.context.log, env=env)
                 elif callable(target):
                     self.invoke(target, value, self.context)
                     # sig = signature(target)
@@ -57,7 +57,7 @@ class Processor:
                     # target(*args)
             except Exception as e:
                 if self.context is not None:
-                    self.context.print(str(e))
+                    self.context.log(str(e))
 
     def create_task(self, input, output, value):
         async def run():

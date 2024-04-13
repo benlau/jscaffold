@@ -48,8 +48,8 @@ class FormPanel:
             self.context = Context(
                 input=self.input,
                 output=self.output,
-                print=self.logger.append_stdout,
-                clear_output=self.logger.clear_output,
+                log=self.logger.append_stdout,
+                clear_log=self.logger.clear_output,
             )
 
         self.create_widget()

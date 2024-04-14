@@ -2,7 +2,7 @@ from jscaffold.doublebufferoutput import DoubleBufferOutput
 from jscaffold.decorators.iot import preset_iot_class_method
 from .interfacebuilder import InterfaceBuilder
 from .columnflow import ColumnFlow
-from .context import Context
+from .contexts.context import Context
 from IPython.display import display, clear_output
 from ipywidgets import widgets
 from .block import Block

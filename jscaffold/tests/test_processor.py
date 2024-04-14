@@ -1,5 +1,5 @@
 import uuid
-from jscaffold.context import Context
+from jscaffold.contexts.context import IOContext
 from jscaffold.iounit.envfilevar import EnvFileVar
 from jscaffold.iounit.envvar import EnvVar
 from jscaffold.processor import Processor
@@ -23,8 +23,8 @@ async def test_processor_skip_options():
 @pytest.mark.asyncio
 async def test_processor_execute_list():
     callback = MagicMock()
-
-    processor = Processor()
+    context = IOContext()
+    processor = Processor(context)
     await processor(EnvVar("VAR1"), [callback, callback], "input")
 
     assert callback.call_count == 2
@@ -117,7 +117,7 @@ async def test_processor_add_apply_to_source():
 
 
 def test_processor_invoke():
-    context = Context()
+    context = IOContext()
     process = Processor(context)
     is_called = False
 

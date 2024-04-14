@@ -1,5 +1,5 @@
 from .variable import Variable
-from ..context import Context
+from ..contexts.context import Context
 from jscaffold.services.sharedstorage import SharedStorage, shared_storage
 
 

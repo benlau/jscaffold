@@ -17,7 +17,7 @@ class Processor:
 
     async def process(self, input, output, value):
         if self.context is not None:
-            self.context.clear_output()
+            self.context.clear_log()
 
         outputs = [output] if not isinstance(output, list) else output[:]
 
@@ -50,11 +50,6 @@ class Processor:
                     await run_task(print=self.context.log, env=env)
                 elif callable(target):
                     self.invoke(target, value, self.context)
-                    # sig = signature(target)
-                    # arg_count = len(sig.parameters)
-
-                    # args = [value, self.context][:arg_count]
-                    # target(*args)
             except Exception as e:
                 if self.context is not None:
                     self.context.log(str(e))
@@ -68,9 +63,10 @@ class Processor:
     def invoke(self, callable, value, context):
         sig = signature(callable)
         args = {}
-        for key in dir(context):
+        context_kwargs = context.to_kwargs()
+        for key in context_kwargs:
             if key in sig.parameters:
-                args[key] = getattr(context, key)
+                args[key] = context_kwargs[key]
         if "value" in sig.parameters:
             args["value"] = value
         if "context" in sig.parameters:

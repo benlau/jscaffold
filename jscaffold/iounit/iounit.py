@@ -1,6 +1,6 @@
 from typing import Any, Optional
 from abc import ABC
-from ..context import Context
+from ..contexts.context import Context
 from jscaffold.services.changedispatcher import change_dispatcher
 
 

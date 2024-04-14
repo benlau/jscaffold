@@ -1,4 +1,4 @@
-from ..context import Context
+from ..contexts.context import IOContext
 from jscaffold.layout.singlevaluelayout import SingleValueLayout
 from jscaffold.layout.formlayout import FormLayout
 from jscaffold.decorators.iot import preset_iot_class_method
@@ -34,7 +34,6 @@ class FormPanel:
         self.input = input
         self.output = output
         self.widget = None
-        self.context = context
         self.logger = logger
         self.is_setup_completed = False
         self.state = FormPanel.State()
@@ -44,12 +43,17 @@ class FormPanel:
         if self.logger is None:
             self.logger = LogViewWidget()
 
-        if self.context is None:
-            self.context = Context(
+        if context is None:
+            self.context = IOContext(
                 input=self.input,
                 output=self.output,
-                log=self.logger.append_stdout,
-                clear_log=self.logger.clear_output,
+                log_view=self.logger,
+            )
+        else:
+            self.context = IOContext.from_base_context(
+                context,
+                input=self.input,
+                output=self.output,
             )
 
         self.create_widget()

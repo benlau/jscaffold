@@ -1,6 +1,6 @@
 import os
 from .variable import Variable
-from ..context import Context
+from ..contexts.context import Context
 
 
 class EnvVar(Variable):

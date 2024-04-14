@@ -9,7 +9,8 @@ class LogViewWidget(anywidget.AnyWidget):
 
     value = traitlets.Unicode("").tag(sync=True)
 
-    def append_stdout(self, message):
+    def append_stdout(self, *args):
+        message = " ".join(str(arg) for arg in args)
         self.value = self.value + message
 
     def clear_output(self):

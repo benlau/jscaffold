@@ -23,6 +23,7 @@ class Format:
         type=FormatType.Text.value,
         defaults: Any = None,
         readonly: bool = False,
+        desc: str = None,
         # For text
         multiline: Optional[Union[bool, int]] = False,
         select: Optional[List[str]] = None,
@@ -37,6 +38,7 @@ class Format:
         self.readonly = readonly
         self.defaults = defaults
         self.password = password
+        self.desc = desc
 
         self.multiline = multiline
         self.select = select
@@ -95,4 +97,8 @@ class Formattable:
 
     def password(self, value=True):
         self.format.password = value
+        return self
+
+    def desc(self, value):
+        self.format.desc = value
         return self

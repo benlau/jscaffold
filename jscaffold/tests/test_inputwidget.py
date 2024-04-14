@@ -15,11 +15,11 @@ def test_textinputwidget_placeholder():
 
     var = EnvVar(str(uuid.uuid4()))
     input_widget = factory.create_input(var)
-    assert input_widget.widget.placeholder == ""
+    assert input_widget.text_widget.placeholder == ""
 
     var = EnvVar(str(uuid.uuid4())).defaults("placeholder")
     input_widget = factory.create_input(var)
-    assert input_widget.widget.placeholder == "placeholder"
+    assert input_widget.text_widget.placeholder == "placeholder"
 
 
 def test_create():

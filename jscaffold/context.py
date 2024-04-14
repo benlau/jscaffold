@@ -20,9 +20,9 @@ class Context:
         self._log = log
         self._clear_log = clear_log
 
-    def log(self, message):
+    def log(self, *args):
         if self._log is not None:
-            self._log(message)
+            self._log(*args)
 
     def clear_output(self):
         if self._clear_log is not None:
@@ -37,6 +37,6 @@ class Context:
             input=input,
             output=output,
             main_layout=self.main_layout,
-            print=self.print,
+            log=self.log,
             clear_output=self.clear_output,
         )

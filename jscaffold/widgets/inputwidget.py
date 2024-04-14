@@ -15,13 +15,24 @@ class InputWidgetType(Enum):
 
 
 class InputWidget:
-    def __init__(self, type):
+    def __init__(self, type, input, child):
         self.type = type
-        self.widget = None
+        self.input = input
+        self.desc_html = widgets.HTML(
+            value=input.format.desc if input.format.desc is not None else ""
+        )
+        self.widget = widgets.VBox([child, self.desc_html])
+        self.update_widget()
 
     def focus(self):
         if self.widget is not None:
             self.widget.focus()
+
+    def update_widget(self):
+        desc = self.input.format.desc
+        if desc is not None:
+            self.desc_html.value = desc
+        self.desc_html.layout.visibility = "visible" if desc else "hidden"
 
     @property
     def value(self):
@@ -34,7 +45,6 @@ class InputWidget:
 
 class TextInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
-        super().__init__(InputWidgetType.Text.value)
         value = input.read() if input is not None else None
         format = input.format
         password = format.password
@@ -56,15 +66,20 @@ class TextInputWidget(InputWidget):
                 placeholder=placeholder,
                 disabled=format.readonly,
             )
-        self.widget = text_widget
+
+        self.text_widget = text_widget
+        super().__init__(InputWidgetType.Text.value, input, text_widget)
 
     @property
     def value(self):
-        return self.widget.value
+        return self.text_widget.value
 
     @value.setter
     def value(self, value):
-        self.widget.value = value
+        if value is None:
+            value = ""
+        if self.text_widget.value != value:
+            self.text_widget.value = value
 
 
 DEFAULT_ROW_COUNT = 5
@@ -72,7 +87,6 @@ DEFAULT_ROW_COUNT = 5
 
 class TextAreaInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
-        super().__init__(InputWidgetType.Textarea.value)
         value = input.read()
         placeholder = input._query_defaults()
         if placeholder is None:
@@ -91,20 +105,23 @@ class TextAreaInputWidget(InputWidget):
             layout=layout,
             disabled=format.readonly,
         )
-        self.widget = textarea
+        self.textarea = textarea
+        super().__init__(InputWidgetType.Textarea.value, input, textarea)
 
     @property
     def value(self):
-        return self.widget.value
+        return self.textarea.value
 
     @value.setter
     def value(self, value):
-        self.widget.value = value
+        if value is None:
+            value = ""
+        if self.textarea.value != value:
+            self.textarea.value = value
 
 
 class SelectInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
-        super().__init__(InputWidgetType.Select.value)
         value = input.read()
         format = input.format
         self.format = format
@@ -116,22 +133,22 @@ class SelectInputWidget(InputWidget):
         select_widget = widgets.Select(
             options=format.select, value=value, disabled=format.readonly
         )
-        self.widget = select_widget
+        self.select_widget = select_widget
+        super().__init__(InputWidgetType.Select.value, input, select_widget)
 
     @property
     def value(self):
-        return self.widget.value
+        return self.select_widget.value
 
     @value.setter
     def value(self, value):
         if value not in self.format.select:
             value = None
-        self.widget.value = value
+        self.select_widget.value = value
 
 
 class FileUploadInputWidget(InputWidget):
     def __init__(self, input: InputUnit):
-        super().__init__(InputWidgetType.UploadFile.value)
         value = str(input) if input is not None else None
 
         format = input.format
@@ -140,7 +157,6 @@ class FileUploadInputWidget(InputWidget):
         )
         uploader = widgets.FileUpload(multiple=False)
         self.text_box = text_box
-        self.widget = widgets.HBox([text_box, uploader])
 
         def get_upload_folder():
             if format.upload_folder is not None:
@@ -164,6 +180,9 @@ class FileUploadInputWidget(InputWidget):
 
         uploader.observe(on_upload_change, names="value")
 
+        hbox = widgets.HBox([text_box, uploader])
+        super().__init__(InputWidgetType.UploadFile.value, input, hbox)
+
     @property
     def value(self):
         return self.text_box.value
@@ -183,7 +202,6 @@ class LocalPathInputWidget(InputWidget):
                 return
             text_box.value = file_path
 
-        super().__init__(InputWidgetType.UploadFile.value)
         value = input.read()
         format = input.format
         placeholder = input._query_defaults()
@@ -198,8 +216,9 @@ class LocalPathInputWidget(InputWidget):
         browse_button = widgets.Button(description="Browse", disabled=format.readonly)
         self.text_box = text_box
         self.browser_button = browse_button
-        self.widget = widgets.HBox([text_box, browse_button])
+        hbox = widgets.HBox([text_box, browse_button])
         browse_button.on_click(on_click)
+        super().__init__(InputWidgetType.UploadFile.value, input, hbox)
 
     @property
     def value(self):

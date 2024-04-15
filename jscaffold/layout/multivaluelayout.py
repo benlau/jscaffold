@@ -6,7 +6,6 @@ from jscaffold.services.changedispatcher import (
 )
 import ipywidgets as widgets
 from jscaffold.iounit.variable import Variable
-from ..doublebufferoutput import DoubleBufferOutput
 from ..widgets.widgetfactory import WidgetFactory
 
 
@@ -49,7 +48,6 @@ class MultiValueLayout:
     # pylama:ignore=C901
     def create_widget(self):
         factory = WidgetFactory()
-        output_widget = DoubleBufferOutput()
 
         layout = []
         self.title_widget = widgets.HTML()
@@ -106,7 +104,7 @@ class MultiValueLayout:
         )
         self.confirm_button = confirm_button
         self.submit_area = submit_area
-        widgets_box = widgets.VBox(layout + [grid, submit_area, output_widget.widget])
+        widgets_box = widgets.VBox(layout + [grid, submit_area])
         for widget in self.input_widgets:
 
             def on_user_change(change):

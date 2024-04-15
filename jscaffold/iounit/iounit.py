@@ -80,14 +80,4 @@ class Outputable(ABC):
 
 
 class IOAble(Inputable, Outputable):
-    def if_none_write_default(self):
-        """
-        If the current value is none, read the value.
-        If it is also none, write default
-        """
-        if self.format.defaults is None:
-            return
-
-        value = self._read()
-        if value is None:
-            self.write(self._query_defaults())
+    pass

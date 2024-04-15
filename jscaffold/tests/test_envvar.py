@@ -31,14 +31,6 @@ def test_envvar_write_none():
     assert os.getenv("var1", None) is None
 
 
-def test_if_none_write_defaults():
-    name = "5b690270-59c0-11ee-8c99-0242ac120002 "
-    var = EnvVar(name).defaults("default")
-    var.if_none_write_default()
-
-    assert os.getenv(name) == "default"
-
-
 @patch("jscaffold.services.changedispatcher.change_dispatcher.dispatch")
 def test_envvar_write_should_dispatch_change(mock_dispatch):
     var = EnvVar("VAR")

@@ -1,11 +1,11 @@
 from contextlib import contextmanager
 from contextvars import Context
-from .iounit import IOUnit
+from .iounit import IOAble
 from .format import Format, Formattable
 import copy
 
 
-class Variable(IOUnit, Formattable):
+class Variable(IOAble, Formattable):
     def __init__(self):
         self.format = Format()
         self._has_cached_value = False

@@ -1,9 +1,9 @@
-from .iounit import InputUnit, OutputUnit
+from .iounit import Inputable, Outputable
 
 
-class ApplyToSource(OutputUnit):
+class ApplyToSource(Outputable):
     """
-    An OutputUnit that writes the value to the source input.
+    An Outputable that writes the value to the source input.
     """
 
     def __call__(self, value, context):
@@ -18,8 +18,8 @@ class ApplyToSource(OutputUnit):
 
         for index, value in enumerate(values):
             source = sources[index]
-            if isinstance(source, InputUnit):
+            if isinstance(source, Inputable):
                 if source.format.readonly:
                     continue
-            if isinstance(source, OutputUnit):
+            if isinstance(source, Outputable):
                 source.write(value, context)

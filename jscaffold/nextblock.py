@@ -1,12 +1,12 @@
 from jscaffold.decorators.iot import preset_iot_class_method
 from .contexts.context import Context
-from .iounit.iounit import OutputUnit
+from .iounit.iounit import Outputable
 from .block import Block
 
 
-class NextBlock(OutputUnit):
+class NextBlock(Outputable):
     """
-    NewBlock is a OutputUnit for create a new unit
+    NewBlock is a Outputable for create a new unit
     in Scaffold application
     """
 

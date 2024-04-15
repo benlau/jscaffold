@@ -7,7 +7,7 @@ from jscaffold.widgets.inputwidget import (
     TextAreaInputWidget,
     TextInputWidget,
 )
-from ..iounit.iounit import InputUnit
+from ..iounit.iounit import Inputable
 from enum import Enum
 
 
@@ -81,7 +81,7 @@ class WidgetFactory:
             button, container, on_click=lambda callback: button.on_click(callback)
         )
 
-    def get_input_widget_type(self, input: InputUnit, format: Format):
+    def get_input_widget_type(self, input: Inputable, format: Format):
         if (
             format.type == FormatType.File.value
             and format.file_source == FileSource.Upload.value
@@ -100,7 +100,7 @@ class WidgetFactory:
             return InputWidgetType.Textarea
         return InputWidgetType.Text
 
-    def create_input(self, input: InputUnit):
+    def create_input(self, input: Inputable):
         format = input.format
         input_widget_type = self.get_input_widget_type(input, format)
 

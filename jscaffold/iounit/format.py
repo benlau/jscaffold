@@ -69,6 +69,9 @@ class Formattable:
         self,
         *args: Optional[List[str]],
     ):
+        if len(args) == 0:
+            self.format.select = None
+            return self
         res = []
         for arg in args:
             if isinstance(arg, list):

@@ -4,9 +4,9 @@ from ..contexts.context import Context
 from jscaffold.services.changedispatcher import change_dispatcher
 
 
-class InputUnit(ABC):
+class Inputable(ABC):
     """
-    InputUnit is a class that represents an input unit.
+    Inputable is a class that represents an input unit.
     """
 
     def __str__(self):
@@ -64,13 +64,13 @@ class InputUnit(ABC):
         raise NotImplementedError()
 
 
-class OutputUnit(ABC):
+class Outputable(ABC):
     def __call__(self, value=None, context: Context = None):
         return self.write(value, context=context)
 
     def write(self, value=None, context: Context = None):
         ret = self._write(value, context=context)
-        if isinstance(self, InputUnit):
+        if isinstance(self, Inputable):
             object_id = self._get_id()
             change_dispatcher.dispatch(object_id, value)
         return ret
@@ -79,7 +79,7 @@ class OutputUnit(ABC):
         raise NotImplementedError()
 
 
-class IOUnit(InputUnit, OutputUnit):
+class IOAble(Inputable, Outputable):
     def if_none_write_default(self):
         """
         If the current value is none, read the value.

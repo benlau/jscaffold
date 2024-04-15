@@ -25,7 +25,7 @@ The main element in JScaffold is a UI form that can read from a field in a .env 
 Users may also execute a function or script instead of just saving the value. 
 By repeating different forms, an application can be built for various purposes.
 
-- [ ] Demo notebook
+- [ ] Link to Demo notebook
 
 ## Examples
 
@@ -38,7 +38,7 @@ version = JsonFileVar("version", "package.json").indent(4)
 form([env, version])
 ```
 
-- [ ] Screenshot
+![image](https://github.com/benlau/jscaffold/assets/82716/a93bf92a-74c8-460d-bf55-2a89e55258d4)
 
 ### Pick a file and pass to a shell script
 

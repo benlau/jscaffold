@@ -1,5 +1,5 @@
 from enum import Enum
-from jscaffold.iounit.iounit import InputUnit
+from jscaffold.iounit.iounit import Inputable
 from jscaffold.services.tkservice import tk_serivce
 from ipywidgets import widgets
 import tempfile
@@ -44,7 +44,7 @@ class InputWidget:
 
 
 class TextInputWidget(InputWidget):
-    def __init__(self, input: InputUnit):
+    def __init__(self, input: Inputable):
         value = input.read() if input is not None else None
         format = input.format
         password = format.password
@@ -86,7 +86,7 @@ DEFAULT_ROW_COUNT = 5
 
 
 class TextAreaInputWidget(InputWidget):
-    def __init__(self, input: InputUnit):
+    def __init__(self, input: Inputable):
         value = input.read()
         placeholder = input._query_defaults()
         if placeholder is None:
@@ -121,7 +121,7 @@ class TextAreaInputWidget(InputWidget):
 
 
 class SelectInputWidget(InputWidget):
-    def __init__(self, input: InputUnit):
+    def __init__(self, input: Inputable):
         value = input.read()
         format = input.format
         self.format = format
@@ -148,7 +148,7 @@ class SelectInputWidget(InputWidget):
 
 
 class FileUploadInputWidget(InputWidget):
-    def __init__(self, input: InputUnit):
+    def __init__(self, input: Inputable):
         value = str(input) if input is not None else None
 
         format = input.format
@@ -193,7 +193,7 @@ class FileUploadInputWidget(InputWidget):
 
 
 class LocalPathInputWidget(InputWidget):
-    def __init__(self, input: InputUnit):
+    def __init__(self, input: Inputable):
         def on_click(_):
             self.browser_button.disabled = True
             file_path = tk_serivce.open_file_dialog(input.format.file_type)

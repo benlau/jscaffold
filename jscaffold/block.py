@@ -1,4 +1,4 @@
-from .layout.formlayout import FormLayout
+from .layout.multivaluelayout import MultiValueLayout
 from .layout.singlevaluelayout import SingleValueLayout
 from .interfacebuilder import InterfaceBuilder
 
@@ -10,7 +10,7 @@ class Block(InterfaceBuilder):
     def ask(self, input=None, output=None, title=None):
         self.context.main_layout.truncate(self.context.current_block_index)
         if isinstance(input, list):
-            layout = FormLayout(input, output, title, self.context)
+            layout = MultiValueLayout(input, output, title, self.context)
         else:
             layout = SingleValueLayout(input, output, title, self.context)
         self.layout = layout

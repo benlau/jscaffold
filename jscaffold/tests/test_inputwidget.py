@@ -33,3 +33,17 @@ def test_create():
     ]
     for widget in widgets:
         widget(var)
+
+
+def test_observe():
+    var = EnvVar("var").select([])
+    widgets = [
+        TextInputWidget,
+        TextAreaInputWidget,
+        SelectInputWidget,
+        FileUploadInputWidget,
+        LocalPathInputWidget,
+    ]
+    for widget in widgets:
+        w = widget(var)
+        w.observe(lambda x: x)

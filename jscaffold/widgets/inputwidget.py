@@ -42,6 +42,9 @@ class InputWidget:
     def value(self, _value):
         raise NotImplementedError
 
+    def observe(self, func):
+        raise NotImplementedError
+
 
 class TextInputWidget(InputWidget):
     def __init__(self, input: Inputable):
@@ -81,6 +84,9 @@ class TextInputWidget(InputWidget):
         if self.text_widget.value != value:
             self.text_widget.value = value
 
+    def observe(self, func):
+        self.text_widget.observe(func)
+
 
 DEFAULT_ROW_COUNT = 5
 
@@ -119,6 +125,9 @@ class TextAreaInputWidget(InputWidget):
         if self.textarea.value != value:
             self.textarea.value = value
 
+    def observe(self, func):
+        return self.textarea.observe(func)
+
 
 class SelectInputWidget(InputWidget):
     def __init__(self, input: Inputable):
@@ -145,6 +154,9 @@ class SelectInputWidget(InputWidget):
         if value not in self.format.select:
             value = None
         self.select_widget.value = value
+
+    def observe(self, func):
+        return self.select_widget.observe(func)
 
 
 class FileUploadInputWidget(InputWidget):
@@ -191,6 +203,9 @@ class FileUploadInputWidget(InputWidget):
     def value(self, value):
         self.text_box.value = value
 
+    def observe(self, func):
+        return self.text_box.observe(func)
+
 
 class LocalPathInputWidget(InputWidget):
     def __init__(self, input: Inputable):
@@ -227,3 +242,6 @@ class LocalPathInputWidget(InputWidget):
     @value.setter
     def value(self, value):
         self.text_box.value = value
+
+    def observe(self, func):
+        return self.text_box.observe(func)

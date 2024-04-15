@@ -10,7 +10,7 @@ from ..doublebufferoutput import DoubleBufferOutput
 from ..widgets.widgetfactory import WidgetFactory
 
 
-class FormLayout:
+class MultiValueLayout:
     """
     FormLayout is a class that creates a layout for a form.
     """
@@ -19,6 +19,7 @@ class FormLayout:
         def __init__(self):
             self.title = None
             self.action_label = "Confirm"
+            self.instant_update = False
 
     # TODO:
     # - Add support for debouncer
@@ -29,7 +30,7 @@ class FormLayout:
         output=None,
         title="Form",
         context=None,
-        instant_write=False,
+        instant_update=False,
     ):
         if isinstance(input, list):
             self.input = input
@@ -38,9 +39,9 @@ class FormLayout:
         self.output = output
         self.input_widgets = []
         self.context = context
-        self.instant_write = instant_write
         self.confirm_button = None
-        self.state = FormLayout.State()
+        self.state = MultiValueLayout.State()
+        self.state.instant_update = instant_update
         self.state.title = title
         self.create_widget()
         self.update_widget()
@@ -100,23 +101,23 @@ class FormLayout:
             task.add_done_callback(lambda _: enable())
 
         self.confirm_button = None
-        if self.instant_write is False:
-            (submit_area, confirm_button) = factory.create_submit_area(
-                self.output, on_submit
-            )
-            self.confirm_button = confirm_button
-            widgets_box = widgets.VBox(
-                layout + [grid, submit_area, output_widget.widget]
-            )
-        else:
-            for widget in self.input_widgets:
+        (submit_area, confirm_button) = factory.create_submit_area(
+            self.output, on_submit
+        )
+        self.confirm_button = confirm_button
+        self.submit_area = submit_area
+        widgets_box = widgets.VBox(layout + [grid, submit_area, output_widget.widget])
+        for widget in self.input_widgets:
 
-                def on_change(change):
-                    if change["type"] == "change" and change["name"] == "value":
-                        on_submit()
+            def on_user_change(change):
+                if (
+                    change["type"] == "change"
+                    and change["name"] == "value"
+                    and self.state.instant_update is True
+                ):
+                    on_submit()
 
-                widget.widget.observe(on_change)
-            widgets_box = widgets.VBox(layout + [grid, output_widget.widget])
+            widget.observe(on_user_change)
         self.widget = widgets_box
 
     def update_widget(self):
@@ -126,6 +127,15 @@ class FormLayout:
         )
         if self.confirm_button is not None:
             self.confirm_button.description = self.state.action_label
+
+        if self.state.instant_update is True:
+            self.confirm_button.disabled = True
+            self.confirm_button.layout.visibility = "hidden"
+            self.submit_area.layout.visibility = "hidden"
+        else:
+            self.confirm_button.disabled = False
+            self.confirm_button.layout.visibility = "visible"
+            self.submit_area.layout.visibility = "visible"
 
     def focus(self):
         if len(self.input_widgets) > 0:
@@ -138,5 +148,10 @@ class FormLayout:
 
     def action_label(self, value):
         self.state.action_label = value
+        self.update_widget()
+        return self
+
+    def instant_update(self, value=True):
+        self.state.instant_update = value
         self.update_widget()
         return self

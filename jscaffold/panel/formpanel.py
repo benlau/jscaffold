@@ -1,6 +1,6 @@
 from ..contexts.context import IOContext
 from jscaffold.layout.singlevaluelayout import SingleValueLayout
-from jscaffold.layout.formlayout import FormLayout
+from jscaffold.layout.multivaluelayout import MultiValueLayout
 from jscaffold.decorators.iot import preset_iot_class_method
 from IPython.display import display
 from jscaffold.views.logview.logview import LogViewWidget
@@ -16,7 +16,7 @@ class FormPanel:
         """
 
         def __init__(self):
-            self.instant_write = False
+            self.instant_update = False
             self.title = None
             self.action_label = "Confirm"
             self.save_changes = True
@@ -29,7 +29,7 @@ class FormPanel:
         title=None,
         logger=None,
         context=None,
-        instant_write=False,  # TODO
+        instant_update=False,  # TODO
     ):
         self.input = input
         self.output = output
@@ -38,7 +38,7 @@ class FormPanel:
         self.is_setup_completed = False
         self.state = FormPanel.State()
         self.state.title = title
-        self.state.instant_write = instant_write
+        self.state.instant_update = instant_update
 
         if self.logger is None:
             self.logger = LogViewWidget()
@@ -63,13 +63,17 @@ class FormPanel:
         output = self.output
         title = self.state.title
 
+        if input is None:
+            self.widget = widgets.VBox([self.logger])
+            return
+
         if isinstance(input, list):
-            layout = FormLayout(
+            layout = MultiValueLayout(
                 input,
                 output,
                 title,
                 context=self.context,
-                instant_write=self.state.instant_write,
+                instant_update=self.state.instant_update,
             )
         else:
             layout = SingleValueLayout(
@@ -77,14 +81,17 @@ class FormPanel:
                 output,
                 title,
                 context=self.context,
-                instant_write=self.state.instant_write,
+                instant_update=self.state.instant_update,
             )
         self.layout = layout
 
         self.widget = widgets.VBox([self.layout.widget, self.logger])
 
     def update_widget(self):
-        self.layout.title(self.state.title).action_label(self.state.action_label)
+        if self.layout is not None:
+            self.layout.title(self.state.title).action_label(self.state.action_label)
+            self.layout.instant_update(self.state.instant_update)
+            self.layout.update_widget()
 
     def __repr__(self):
         return ""
@@ -109,6 +116,11 @@ class FormPanel:
         self.update_widget()
         return self
 
-    def save_changes(self, value):
+    def instant_update(self, value: bool = True):
+        self.state.instant_update = value
+        self.update_widget()
+        return self
+
+    def save_changes(self, value: bool):
         self.context.save_changes = value
         return self

@@ -15,7 +15,7 @@ class SingleValueLayout:
 
     class State:
         def __init__(self):
-            self.instant_write = False
+            self.instant_update = False
             self.title = None
             self.action_label = "Confirm"
 
@@ -26,7 +26,7 @@ class SingleValueLayout:
         output=None,
         title=None,
         context=None,
-        instant_write=False,
+        instant_update=False,
     ):
         self.input = input
         self.output = output
@@ -35,7 +35,7 @@ class SingleValueLayout:
 
         self.state = SingleValueLayout.State()
         self.state.title = title
-        self.state.instant_write = instant_write
+        self.state.instant_update = instant_update
         self.create_widget()
         self.update_widget()
 
@@ -45,11 +45,10 @@ class SingleValueLayout:
 
     # pylama:ignore=C901
     def create_widget(self):
-        layout = []
         factory = WidgetFactory()
         self.input_widget = None
 
-        def on_change(value):
+        def on_dispatcher_change(value):
             try:
                 if self.input_widget.value != value:
                     self.input_widget.value = value
@@ -71,42 +70,31 @@ class SingleValueLayout:
             task = processor.create_task(self.input, self.output, current_input_value)
             task.add_done_callback(lambda _: enable())
 
+        def on_user_change(change):
+            if (
+                change["type"] == "change"
+                and change["name"] == "value"
+                and self.state.instant_update is True
+            ):
+                on_submit()
+
         # TODO: Update title style
         self.title_widget = widgets.HTML(value=self.state.title)
-        layout.append(self.title_widget)
-
-        if self.input is None:
-            (submit_area, confirm_button) = factory.create_submit_area(
-                self.output, on_submit=on_submit, default_label=self.state.action_label
-            )
-            self.confirm_button = confirm_button
-            widgets_box = widgets.VBox(layout + [submit_area])
-            self.widget = widgets_box
-            return
 
         input_widget = factory.create_input(self.input)
         self.input_widget = input_widget
 
-        listener = Listener(self.input._get_id(), on_change)
+        listener = Listener(self.input._get_id(), on_dispatcher_change)
         change_dispatcher.add_listener(listener)
 
-        self.confirm_button = None
-        if self.state.instant_write is False:
-            (submit_area, confirm_button) = factory.create_submit_area(
-                self.output, on_submit=on_submit, default_label=self.state.action_label
-            )
-            self.confirm_button = confirm_button
-            widgets_box = widgets.VBox(layout + [input_widget.widget, submit_area])
-        else:
-
-            def on_change(change):
-                if change["type"] == "change" and change["name"] == "value":
-                    on_submit()
-
-            self.input_widget.widget.observe(on_change)
-            widgets_box = widgets.VBox(layout + [input_widget.widget])
-
-        self.widget = widgets_box
+        (submit_area, confirm_button) = factory.create_submit_area(
+            self.output, on_submit=on_submit, default_label=self.state.action_label
+        )
+        self.submit_area = submit_area
+        self.confirm_button = confirm_button
+        self.input_widget.observe(on_user_change)
+        vbox = widgets.VBox([self.title_widget, self.input_widget.widget, submit_area])
+        self.widget = vbox
 
     def update_widget(self):
         self.title_widget.value = self.state.title if self.state.title else ""
@@ -115,6 +103,14 @@ class SingleValueLayout:
         )
         if self.confirm_button is not None:
             self.confirm_button.description = self.state.action_label
+        if self.state.instant_update is True:
+            self.confirm_button.disabled = True
+            self.confirm_button.layout.visibility = "hidden"
+            self.submit_area.layout.visibility = "hidden"
+        else:
+            self.confirm_button.disabled = False
+            self.confirm_button.layout.visibility = "visible"
+            self.submit_area.layout.visibility = "visible"
 
     def title(self, value):
         self.state.title = value
@@ -123,5 +119,10 @@ class SingleValueLayout:
 
     def action_label(self, value):
         self.state.action_label = value
+        self.update_widget()
+        return self
+
+    def instant_update(self, value: bool):
+        self.state.instant_update = value
         self.update_widget()
         return self

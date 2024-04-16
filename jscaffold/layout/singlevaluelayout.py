@@ -81,19 +81,26 @@ class SingleValueLayout:
         # TODO: Update title style
         self.title_widget = widgets.HTML(value=self.state.title)
 
-        input_widget = factory.create_input(self.input)
+        if self.input is not None:
+            input_widget = factory.create_input(self.input)
+            input_widget.observe(on_user_change)
+            listener = Listener(self.input._get_id(), on_dispatcher_change)
+            change_dispatcher.add_listener(listener)
+        else:
+            input_widget = None
         self.input_widget = input_widget
-
-        listener = Listener(self.input._get_id(), on_dispatcher_change)
-        change_dispatcher.add_listener(listener)
 
         (submit_area, confirm_button) = factory.create_submit_area(
             self.output, on_submit=on_submit, default_label=self.state.action_label
         )
         self.submit_area = submit_area
         self.confirm_button = confirm_button
-        self.input_widget.observe(on_user_change)
-        vbox = widgets.VBox([self.title_widget, self.input_widget.widget, submit_area])
+        if self.input is not None:
+            vbox = widgets.VBox(
+                [self.title_widget, self.input_widget.widget, submit_area]
+            )
+        else:
+            vbox = widgets.VBox([self.title_widget, submit_area])
         self.widget = vbox
 
     def update_widget(self):

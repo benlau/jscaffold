@@ -1,17 +1,27 @@
+import asyncio
+
+
 class ChangeDispatcher:
     def __init__(self):
         # It can't use WeakSet because it will be removed in Jupyter environment
         self.listeners = set()
+        self.queue = []
 
     def add_listener(self, listener):
         self.listeners.add(listener)
 
-    def dispatch(self, type, payload):
-        for listener in self.listeners:
-            try:
-                listener(type, payload)
-            except Exception:
-                self.listeners.remove(listener)
+    def dispatch(self, key, payload):
+        async def dispatch_async():
+            for item in self.queue:
+                for listener in self.listeners:
+                    try:
+                        listener(*item)
+                    except Exception:
+                        self.listeners.remove(listener)
+            self.queue.clear()
+
+        self.queue.append((key, payload))
+        asyncio.create_task(dispatch_async())
 
 
 class Listener:

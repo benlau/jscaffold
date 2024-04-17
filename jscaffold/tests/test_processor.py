@@ -92,7 +92,9 @@ async def test_processor_throw_exception():
     context = MagicMock()
     processor = Processor(context)
     await processor(None, callback, context)
-    context.log.assert_called_once_with("Error")
+    message = context.log.call_args[0][0]
+
+    assert message.split("\n")[0] == "Traceback (most recent call last):"
 
 
 @pytest.mark.asyncio

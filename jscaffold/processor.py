@@ -2,6 +2,7 @@ from jscaffold.task.runtask import RunTask
 from jscaffold.iounit.applytosource import ApplyToSource
 import asyncio
 from inspect import signature
+import traceback
 
 
 class Processor:
@@ -50,9 +51,9 @@ class Processor:
                     await run_task(print=self.context.log, env=env)
                 elif callable(target):
                     self.invoke(target, value, self.context)
-            except Exception as e:
+            except Exception:
                 if self.context is not None:
-                    self.context.log(str(e))
+                    self.context.log(traceback.format_exc())
 
     def create_task(self, input, output, value):
         async def run():

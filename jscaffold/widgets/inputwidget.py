@@ -1,4 +1,5 @@
 from enum import Enum
+from jscaffold.iounit.format import Format
 from jscaffold.iounit.iounit import Inputable
 from jscaffold.services.tkservice import tk_serivce
 from ipywidgets import widgets
@@ -18,8 +19,9 @@ class InputWidget:
     def __init__(self, type, input, child):
         self.type = type
         self.input = input
+        format = input.format if hasattr(input, "format") else Format()
         self.desc_html = widgets.HTML(
-            value=input.format.desc if input.format.desc is not None else ""
+            value=format.desc if format.desc is not None else ""
         )
         self.widget = widgets.VBox([child, self.desc_html])
         self.update_widget()
@@ -29,7 +31,8 @@ class InputWidget:
             self.widget.focus()
 
     def update_widget(self):
-        desc = self.input.format.desc
+        format = self.input.format if hasattr(self.input, "format") else Format()
+        desc = format.desc
         if desc is not None:
             self.desc_html.value = desc
         self.desc_html.layout.visibility = "visible" if desc else "hidden"
@@ -49,9 +52,9 @@ class InputWidget:
 class TextInputWidget(InputWidget):
     def __init__(self, input: Inputable):
         value = input.read() if input is not None else None
-        format = input.format
+        format = input.format if hasattr(input, "format") else Format()
         password = format.password
-        placeholder = input._query_defaults()
+        placeholder = input.get_defaults() if hasattr(input, "get_defaults") else None
         if placeholder is None:
             placeholder = ""
         layout = widgets.Layout(width="360px")
@@ -94,7 +97,7 @@ DEFAULT_ROW_COUNT = 5
 class TextAreaInputWidget(InputWidget):
     def __init__(self, input: Inputable):
         value = input.read()
-        placeholder = input._query_defaults()
+        placeholder = input.get_defaults()
         if placeholder is None:
             placeholder = ""
         format = input.format
@@ -219,7 +222,7 @@ class LocalPathInputWidget(InputWidget):
 
         value = input.read()
         format = input.format
-        placeholder = input._query_defaults()
+        placeholder = input.get_defaults()
         if placeholder is None:
             placeholder = ""
         text_box = widgets.Text(

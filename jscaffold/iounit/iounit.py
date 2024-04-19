@@ -14,7 +14,6 @@ class Inputable(ABC):
 
     def to_string(self, context: Context = None) -> str:
         ret = self._read(context=context)
-        ret = self._normalize_read_value(ret)
         return ret if ret is not None else ""
 
     def read(self, context: Context = None) -> Optional[Any]:
@@ -25,29 +24,6 @@ class Inputable(ABC):
         Read the raw value. If the value is not set, return None
         """
         raise NotImplementedError()
-
-    def _normalize_read_value(self, read_value):
-        """
-        Normalize the read value
-        """
-        if read_value is not None:
-            return read_value
-        if self.format.defaults is not None:
-            return self._query_defaults()
-        return None
-
-    def _query_defaults(self):
-        """
-        Query the default value
-        """
-        defaults = self.format.defaults
-        ret = None
-        if isinstance(defaults, list):
-            ret = defaults[0]
-        else:
-            ret = defaults
-
-        return ret
 
     @property
     def id(self):

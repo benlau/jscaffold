@@ -13,13 +13,12 @@ class TestEnvVar(TestCase):
     def test_envvar_defaults_is_array(self):
         var = EnvVar("VALUE_NOT_EXISTED").defaults(["V1", "V2"])
 
-        assert str(var) == "V1"
+        assert var.value == "V1"
 
     def test_envvar_write_without_value(self):
         name = "7ccb192e-4de4-4720-aa65-e3e687e7a5eb"
         var = EnvVar(name).defaults("default")
         var()
-
         assert os.getenv(name) == "default"
 
     def test_envvar_write_none(self):

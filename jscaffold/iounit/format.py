@@ -61,6 +61,19 @@ class Formattable:
         self.format.defaults = value
         return self
 
+    def get_defaults(self):
+        """
+        Get the default value
+        """
+        defaults = self.format.defaults
+        ret = None
+        if isinstance(defaults, list):
+            ret = defaults[0]
+        else:
+            ret = defaults
+
+        return ret
+
     def multiline(self, multiline: Optional[Union[bool, int]] = True):
         self.format.multiline = multiline
         return self

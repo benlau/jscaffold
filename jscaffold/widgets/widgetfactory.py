@@ -1,5 +1,5 @@
 from ipywidgets import widgets
-from jscaffold.iounit.format import FileSource, Format, FormatType
+from jscaffold.iounit.format import FileSource, FormatType
 from jscaffold.widgets.inputwidget import (
     LocalPathInputWidget,
     SelectInputWidget,
@@ -81,7 +81,10 @@ class WidgetFactory:
             button, container, on_click=lambda callback: button.on_click(callback)
         )
 
-    def get_input_widget_type(self, input: Inputable, format: Format):
+    def get_input_widget_type(self, input: Inputable):
+        if not hasattr(input, "format"):
+            return InputWidgetType.Text
+        format = input.format
         if (
             format.type == FormatType.File.value
             and format.file_source == FileSource.Upload.value
@@ -101,8 +104,7 @@ class WidgetFactory:
         return InputWidgetType.Text
 
     def create_input(self, input: Inputable):
-        format = input.format
-        input_widget_type = self.get_input_widget_type(input, format)
+        input_widget_type = self.get_input_widget_type(input)
 
         if input_widget_type == InputWidgetType.Select:
             return SelectInputWidget(input)

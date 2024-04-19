@@ -13,7 +13,7 @@ class TestEnvFileVar(TestCase):
     def test_envfile_var_read_not_existed_file(self):
         var = EnvFileVar("var", "not_existed_file").defaults("default")
         assert var._read() is None
-        assert var.to_string() == "default"
+        assert var.value == "default"
 
     def test_envfile_var_write_not_existed_file(self):
         tmp_file = NamedTemporaryFile(delete=True)

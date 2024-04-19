@@ -34,7 +34,10 @@ class Variable(IOAble, Formattable):
 
     def refresh(self, context=None):
         self._has_cached_value = True
-        self._cached_value = self._normalize_read_value(self._read(context=context))
+        latest = self._read(context=context)
+        if latest is None and self.format.defaults is not None:
+            latest = self.validate(defaults=self.format.defaults)
+        self._cached_value = latest
         return self
 
     def update(self, value, context=None):

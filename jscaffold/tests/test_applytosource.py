@@ -6,7 +6,7 @@ from jscaffold.processor import Processor
 import pytest
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_should_ignore_readonly():
     context = MagicMock()
     key = str(uuid.uuid4())

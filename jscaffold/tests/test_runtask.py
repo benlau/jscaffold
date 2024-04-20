@@ -4,7 +4,7 @@ import pytest
 import threading
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_runtask_should_print_at_main_thread():
     content = []
     is_main_thread = None
@@ -28,7 +28,7 @@ async def test_runtask_should_print_at_main_thread():
     assert is_main_thread is True
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_runtask_should_support_env():
     env = {"JS_VALUE": "test"}
     script = "echo $JS_VALUE"

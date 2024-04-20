@@ -4,7 +4,7 @@ import pytest
 import asyncio
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_listen():
     listener = Mock()
     dispatcher = ChangeDispatcher()

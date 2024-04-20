@@ -72,4 +72,9 @@ class Processor:
             args["value"] = value
         if "context" in sig.parameters:
             args["context"] = context
+        input = context.input if isinstance(context.input, list) else [context.input]
+        value = value if isinstance(value, list) else [value]
+        for index, i in enumerate(input):
+            if i.key in sig.parameters and i.key not in args:
+                args[i.key] = value[index]
         return callable(**args)

@@ -1,19 +1,13 @@
-from unittest import TestCase
-from unittest.mock import Mock, patch
+import asyncio
+from unittest import IsolatedAsyncioTestCase
+from unittest.mock import MagicMock, Mock, patch
 from jscaffold.iounit.envvar import EnvVar
 from jscaffold.panel.formpanel import FormPanel
+import pytest
 
 
 @patch("jscaffold.services.changedispatcher.ChangeDispatcher.dispatch", Mock())
-class TestFormPanel(TestCase):
-    def test_no_input(self):
-        """
-        No input object can be allowed
-        """
-
-        script = "ls"
-        FormPanel(output=script)
-
+class TestFormPanel(IsolatedAsyncioTestCase):
     def test_form(self):
         """
         FormPanel can be created
@@ -24,6 +18,16 @@ class TestFormPanel(TestCase):
         assert form1.log_view == form2.log_view
 
     def test_output_only_form(self):
-        """ """
-        form = FormPanel(output="ls")
-        assert form.layout is not None
+        """
+        Try to create a form with only output.
+        No error should be raised.
+        """
+        FormPanel().run("ls")
+
+    @pytest.mark.asyncio()
+    async def test_submit(self):
+        callback = MagicMock()
+        form = FormPanel().run([callback])
+        form.submit()
+        await asyncio.sleep(0)
+        callback.assert_called_once()

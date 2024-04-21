@@ -1,6 +1,8 @@
 from enum import Enum
 from typing import Any, List, Optional, Union
 
+from jscaffold.utils import args_to_list
+
 
 class FormatType(Enum):
     Text = "text"
@@ -82,16 +84,7 @@ class Formattable:
         self,
         *args: Optional[List[str]],
     ):
-        if len(args) == 0:
-            self.format.select = None
-            return self
-        res = []
-        for arg in args:
-            if isinstance(arg, list):
-                res += arg
-            else:
-                res.append(arg)
-        self.format.select = res
+        self.format.select = args_to_list(args, defaults=None)
         return self
 
     def upload_file(self, folder: str = None, mkdir: bool = False):

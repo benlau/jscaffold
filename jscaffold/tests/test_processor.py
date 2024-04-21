@@ -1,6 +1,6 @@
 from unittest import IsolatedAsyncioTestCase
 import uuid
-from jscaffold.contexts.context import IOContext
+from jscaffold.contexts.context import FormContext
 from jscaffold.iounit.envfilevar import EnvFileVar
 from jscaffold.iounit.envvar import EnvVar
 from jscaffold.processor import Processor
@@ -17,7 +17,7 @@ class TestProcessor(IsolatedAsyncioTestCase):
     async def test_processor_execute_list(self):
         callback = MagicMock()
         var = EnvVar("VAR1")
-        context = IOContext(input=var)
+        context = FormContext(input=var)
         processor = Processor(context)
         await processor(var, [callback, callback], "input")
 
@@ -26,7 +26,7 @@ class TestProcessor(IsolatedAsyncioTestCase):
     @pytest.mark.asyncio()
     async def test_processor_run_func_pass_input(self):
         var = EnvVar("VAR1")
-        context = IOContext(input=var)
+        context = FormContext(input=var)
         processor = Processor(context)
         result = None
 
@@ -122,7 +122,7 @@ class TestProcessor(IsolatedAsyncioTestCase):
 
     def test_processor_invoke(self):
         input = EnvVar("VAR1")
-        context = IOContext(input=input)
+        context = FormContext(input=input)
         process = Processor(context)
         is_called = False
 

@@ -117,8 +117,7 @@ class WidgetFactory:
 
         return TextInputWidget(input)
 
-    def create_submit_area(self, _output, on_submit, default_label="Submit"):
-        # TODO - Handle multiple actions
+    def create_submit_area(self, on_submit, default_label="Submit"):
         submit_button = widgets.Button(description=default_label)
 
         def button_callback(_):

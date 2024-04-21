@@ -29,19 +29,16 @@ class Context:
             self.log_view.clear_output()
 
 
-class IOContext(Context):
-    def __init__(
-        self, input=None, output=None, save_changes=True, parent=None, **kwargs
-    ):
+class FormContext(Context):
+    def __init__(self, input=None, save_changes=True, parent=None, **kwargs):
         super().__init__(**kwargs)
         self.input = input
-        self.output = output
         self.save_changes = save_changes
         self.parent = parent
 
     @staticmethod
     def from_base_context(base_context, **kwargs):
-        return IOContext(
+        return FormContext(
             log_view=base_context.log_view,
             shared_storage=base_context.shared_storage,
             parent=base_context,
@@ -53,7 +50,6 @@ class IOContext(Context):
         kwargs.update(
             {
                 "input": self.input,
-                "output": self.output,
             }
         )
         return kwargs

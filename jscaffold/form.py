@@ -1,11 +1,10 @@
-from jscaffold.decorators.iot import preset_iot
+from jscaffold.iounit.sharedstoragevar import SharedStorageVar
 from jscaffold.panel.formpanel import FormPanel
+from jscaffold.utils import args_to_list
 
 
-@preset_iot
-def form(
-    input=None,
-    output=None,
-    title=None,
-):
-    return FormPanel(input, output, title).show()
+def form(*args):
+    input = args_to_list(args, defaults=[])
+    input = list(map(lambda x: SharedStorageVar(x) if isinstance(x, str) else x, input))
+
+    return FormPanel(input).show()

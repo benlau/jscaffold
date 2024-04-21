@@ -38,3 +38,16 @@ def inspect_arg_name(pos: int, name: str):
             return args[pos]
     except Exception:
         return None
+
+
+def args_to_list(args, defaults=None):
+    if len(args) == 0:
+        return defaults
+
+    res = []
+    for arg in args:
+        if isinstance(arg, list):
+            res += arg
+        else:
+            res.append(arg)
+    return res

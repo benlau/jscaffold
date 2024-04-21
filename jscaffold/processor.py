@@ -13,17 +13,17 @@ class Processor:
     def __init__(self, context=None):
         self.context = context
 
-    async def __call__(self, input, output, value):
-        return await self.process(input, output, value)
+    async def __call__(self, input, runnables, value):
+        return await self.process(input, runnables, value)
 
-    async def process(self, input, output, value):
+    async def process(self, input, runnables, value):
         if self.context is not None:
             self.context.clear_log()
 
-        outputs = [output] if not isinstance(output, list) else output[:]
+        runnables = [runnables] if not isinstance(runnables, list) else runnables[:]
 
         if self.context is not None and self.context.save_changes is True:
-            outputs.insert(0, ApplyToSource())
+            runnables.insert(0, ApplyToSource())
 
         if input is None:
             inputs = []
@@ -42,7 +42,7 @@ class Processor:
             ]
         )
 
-        for target in outputs:
+        for target in runnables:
             try:
                 if isinstance(target, str):
                     script = target

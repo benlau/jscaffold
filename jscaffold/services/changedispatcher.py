@@ -1,4 +1,4 @@
-import asyncio
+from jscaffold.debounce import KeyFilterDebouncer
 
 
 class ChangeDispatcher:
@@ -6,22 +6,20 @@ class ChangeDispatcher:
         # It can't use WeakSet because it will be removed in Jupyter environment
         self.listeners = set()
         self.queue = []
+        self.debouncer = KeyFilterDebouncer(0.1)
 
     def add_listener(self, listener):
         self.listeners.add(listener)
 
     def dispatch(self, key, payload):
-        async def dispatch_async():
-            for item in self.queue:
-                for listener in self.listeners:
-                    try:
-                        listener(*item)
-                    except Exception:
-                        self.listeners.remove(listener)
-            self.queue.clear()
+        self.debouncer(key, self._invoke_listeners, key, payload)
 
-        self.queue.append((key, payload))
-        asyncio.create_task(dispatch_async())
+    def _invoke_listeners(self, key, payload):
+        for listener in self.listeners:
+            try:
+                listener(key, payload)
+            except Exception:
+                self.listeners.remove(listener)
 
 
 class Listener:

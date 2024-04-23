@@ -25,9 +25,9 @@ class TestFormPanel(IsolatedAsyncioTestCase):
         FormPanel().run("ls")
 
     @pytest.mark.asyncio()
-    async def test_submit(self):
+    async def test_submit_output_only(self):
         callback = MagicMock()
-        form = FormPanel().run([callback])
+        form = FormPanel().run(callback)
         form.submit()
         await asyncio.sleep(0)
         callback.assert_called_once()

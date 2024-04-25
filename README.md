@@ -63,17 +63,17 @@ form(file, script).title("Count line")
 ## FormPanel
 
 ```python
-from jscaffold import form
-
-# Definition
-def form(*inputs)
+from jscaffold import form, FormPanel
 ```
+
+### form()
 
 The `form` function is a shortcut to create a FormPanel that renders a form UI based on optional inputs and callback scripts/functions.
 
 This accepts a list of Inputable objects (e.g., EnvVar, EnvFileVar, JsonFileVar) passed as an array by any number of arguments.
 
-In case you pass a string, it will be converted to SharedVar automaticall
+In case you pass a string, it will be converted to SharedVar automatically
+
 Example:
 
 ```
@@ -84,23 +84,24 @@ form(var1,var2)
 form([var,var2])
 form("VAR3") # It will be replaced by a `SharedVar` automatically.
 ```
-### title
-
-```
-class FormPanel
-   def title(self, value: string):
-```
+### FormPanel.title(title:str)
 
 Set the title of the form
 
-### action_label
+Usage:
+```python
+form(var).title("Title of the form")
+```
 
-```
-class FormPanel
-  def action_label(self, value: string):
-```
+### FormPanel.action_label(label:str)
 
 Set the label of action button (default: "Confirm") 
+
+Usage:
+
+```python
+form(var).action_label("OK")
+```
 
 ## Data sources
 

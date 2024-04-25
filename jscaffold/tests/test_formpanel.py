@@ -31,3 +31,19 @@ class TestFormPanel(IsolatedAsyncioTestCase):
         form.submit()
         await asyncio.sleep(0)
         callback.assert_called_once()
+
+    @pytest.mark.asyncio()
+    async def test_submit_should_be_debounced(self):
+        """
+        Another submit should not work until the first one is done.
+        """
+        callback = MagicMock()
+        form = FormPanel().run(callback)
+        form.submit()  # Run immediately
+        assert form.state.is_submitting is True
+        form.submit()  # Debounced
+        form.submit()
+        await asyncio.sleep(0)
+        callback.assert_called_once()
+        await asyncio.sleep(0.2)
+        assert callback.call_count == 2

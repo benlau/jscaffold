@@ -9,6 +9,7 @@ from jscaffold.services.changedispatcher import (
     Listener,
     change_dispatcher,
 )
+from jscaffold.debounce import KeyFilterDebouncer
 
 
 class FormPanel:
@@ -25,6 +26,7 @@ class FormPanel:
             self.action_label = "Confirm"
             self.save_changes = True
             self.runnables = []
+            self.is_submitting = False
 
     def __init__(
         self,
@@ -39,6 +41,7 @@ class FormPanel:
 
         self.widget = None
         self.state = FormPanel.State()
+        self.submit_debouncer = KeyFilterDebouncer(0.1)
 
         has_own_log_view = False
         if log_view is None:
@@ -130,16 +133,21 @@ class FormPanel:
             input_widget.observe(on_user_change)
 
     def submit(self):
-        def enable():
+        def reenable():
             if self.confirm_button is not None:
                 self.confirm_button.disabled = False
+            self.state.is_submitting = False
 
+        if self.state.is_submitting:
+            self.submit_debouncer("", self.submit)
+            return self
+        self.state.is_submitting = True
         display_value = [input_widget.value for input_widget in self.input_widgets]
         processor = Processor(self.context)
         if self.confirm_button is not None:
             self.confirm_button.disabled = True
         task = processor.create_task(self.input, self.state.runnables, display_value)
-        task.add_done_callback(lambda _: enable())
+        task.add_done_callback(lambda _: reenable())
         return self
 
     def update_widget(self):

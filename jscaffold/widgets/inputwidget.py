@@ -162,15 +162,18 @@ class SelectInputWidget(InputWidget):
     def observe(self, func):
         return self.select_widget.observe(func)
 
+    def update_widget(self):
+        super().update_widget()
+        self.select_widget.disabled = self.format.readonly
+        self.select_widget.options = self.format.select
+
 
 class FileUploadInputWidget(InputWidget):
     def __init__(self, input: Inputable):
         value = str(input) if input is not None else None
 
         format = input.format
-        text_box = widgets.Text(
-            value=value, disabled=format.readonly
-        )
+        text_box = widgets.Text(value=value, disabled=format.readonly)
         uploader = widgets.FileUpload(multiple=False)
         self.text_box = text_box
 

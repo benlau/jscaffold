@@ -51,13 +51,11 @@ class FormPanel:
 
         if context is None:
             self.context = FormContext(
-                input=self.input,
-                log_view=self.log_view,
+                input=self.input, log_view=self.log_view, form=self
             )
         else:
             self.context = FormContext.from_base_context(
-                context,
-                input=self.input,
+                context, input=self.input, form=self
             )
 
         self.create_widget(has_own_log_view)
@@ -221,3 +219,8 @@ class FormPanel:
         else:
             self.widget.children = tuple(list(self.widget.children) + [new_form.widget])
         return new_form
+
+    def refresh(self):
+        for input_widget in self.input_widgets:
+            input_widget.update_widget()
+        return self

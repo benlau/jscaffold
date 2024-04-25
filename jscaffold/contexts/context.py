@@ -30,11 +30,12 @@ class Context:
 
 
 class FormContext(Context):
-    def __init__(self, input=None, save_changes=True, parent=None, **kwargs):
+    def __init__(self, input=None, save_changes=True, parent=None, form=None, **kwargs):
         super().__init__(**kwargs)
         self.input = input
         self.save_changes = save_changes
         self.parent = parent
+        self.form = form
 
     @staticmethod
     def from_base_context(base_context, **kwargs):
@@ -45,11 +46,16 @@ class FormContext(Context):
             **kwargs
         )
 
+    def refresh_form(self):
+        if self.form is not None:
+            self.form.refresh()
+
     def to_kwargs(self):
         kwargs = super().to_kwargs()
         kwargs.update(
             {
                 "input": self.input,
+                "refresh_form": self.refresh_form,
             }
         )
         return kwargs

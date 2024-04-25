@@ -142,8 +142,9 @@ class SelectInputWidget(InputWidget):
                 value = input.defaults
             else:
                 value = None
+        layout = widgets.Layout(width="360px")
         select_widget = widgets.Select(
-            options=format.select, value=value, disabled=format.readonly
+            options=format.select, value=value, disabled=format.readonly, layout=layout
         )
         self.select_widget = select_widget
         super().__init__(InputWidgetType.Select.value, input, select_widget)
@@ -168,7 +169,7 @@ class FileUploadInputWidget(InputWidget):
 
         format = input.format
         text_box = widgets.Text(
-            value=value, layout=widgets.Layout(width="300px"), disabled=format.readonly
+            value=value, disabled=format.readonly
         )
         uploader = widgets.FileUpload(multiple=False)
         self.text_box = text_box
@@ -195,7 +196,7 @@ class FileUploadInputWidget(InputWidget):
 
         uploader.observe(on_upload_change, names="value")
 
-        hbox = widgets.HBox([text_box, uploader])
+        hbox = widgets.HBox([text_box, uploader], layout=widgets.Layout(width="360px"))
         super().__init__(InputWidgetType.UploadFile.value, input, hbox)
 
     @property
@@ -227,14 +228,15 @@ class LocalPathInputWidget(InputWidget):
             placeholder = ""
         text_box = widgets.Text(
             value=value,
-            layout=widgets.Layout(width="300px"),
             placeholder=placeholder,
             disabled=format.readonly,
         )
         browse_button = widgets.Button(description="Browse", disabled=format.readonly)
         self.text_box = text_box
         self.browser_button = browse_button
-        hbox = widgets.HBox([text_box, browse_button])
+        hbox = widgets.HBox(
+            [text_box, browse_button], layout=widgets.Layout(width="360px")
+        )
         browse_button.on_click(on_click)
         super().__init__(InputWidgetType.UploadFile.value, input, hbox)
 

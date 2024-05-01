@@ -5,7 +5,7 @@ from __future__ import print_function
 from glob import glob
 import os
 from os.path import join as pjoin
-from setuptools import setup
+from setuptools import find_packages, setup
 from jscaffold._version import __version__
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -50,6 +50,7 @@ setup_args = dict(
         ],
         "docs": [],
     },
+    packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     entry_points={},
 )
 

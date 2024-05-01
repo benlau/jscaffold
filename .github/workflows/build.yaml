@@ -27,3 +27,13 @@ jobs:
           make test
           make lint
           make install-local
+      - name:  Build the package
+        run: |
+          make build_package
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist/*.tar.gz
+            dist/*.whl

@@ -15,11 +15,15 @@ class ChangeDispatcher:
         self.debouncer(key, self._invoke_listeners, key, payload)
 
     def _invoke_listeners(self, key, payload):
+        pending_remove_list = []
         for listener in self.listeners:
             try:
                 listener(key, payload)
             except Exception:
-                self.listeners.remove(listener)
+                pending_remove_list.append(listener)
+
+        for listener in pending_remove_list:
+            self.listeners.remove(listener)
 
 
 class Listener:

@@ -54,6 +54,8 @@ class Processor:
             except Exception:
                 if self.context is not None:
                     self.context.log(traceback.format_exc())
+                # Stop processing if an error occurs
+                break
 
     def create_task(self, input, output, value):
         async def run():

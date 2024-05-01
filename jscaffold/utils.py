@@ -51,3 +51,7 @@ def args_to_list(args, defaults=None):
         else:
             res.append(arg)
     return res
+
+
+def link_to_hash(title: str, hash: str):
+    return f"<a href='#{hash}'>{title}</a>"

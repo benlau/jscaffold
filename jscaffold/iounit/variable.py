@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from contextvars import Context
 from .iounit import IOAble
-from .format import Format, Formattable
+from .format import Format, Formattable, Formatter
 import copy
 
 
@@ -14,19 +14,6 @@ class Variable(IOAble, Formattable):
     def copy(self):
         return copy.deepcopy(self)
 
-    def validate(self, value=None, defaults=None):
-        if value is not None:
-            return value
-        if defaults is None:
-            return None
-
-        if isinstance(defaults, str):
-            return defaults
-        elif isinstance(defaults, list):
-            return defaults[0]
-
-        return None
-
     def write(self, value=None, context: Context = None):
         super().write(value, context=context)
         self._has_cached_value = True
@@ -35,8 +22,7 @@ class Variable(IOAble, Formattable):
     def refresh(self, context=None):
         self._has_cached_value = True
         latest = self._read(context=context)
-        if latest is None and self.format.defaults is not None:
-            latest = self.validate(defaults=self.format.defaults)
+        latest = Formatter(self.format, latest).if_none_use_defaults().value
         self._cached_value = latest
         return self
 

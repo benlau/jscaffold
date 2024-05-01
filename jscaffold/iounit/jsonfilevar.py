@@ -44,9 +44,9 @@ class JsonFileVar(Variable):
         if content is None:
             content = {}
         new_content = self.patcher.write(content, self.state.path, value)
-        file = open(self.filename, "w")
-        file.write(json.dumps(new_content, indent=self.state.indent))
-        file.close()
+        with open(self.filename, "w") as file:
+            file.write(json.dumps(new_content, indent=self.state.indent))
+            file.close()
 
         if context is not None and context.log is not None:
             context.log(

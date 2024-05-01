@@ -1,12 +1,13 @@
 from enum import Enum
 from typing import Any, List, Optional, Union
-
+import re
 from jscaffold.utils import args_to_list
 
 
 class FormatType(Enum):
     Text = "text"
     File = "file"
+    Number = "number"
 
 
 class FileSource(Enum):
@@ -110,4 +111,40 @@ class Formattable:
 
     def desc(self, value):
         self.format.desc = value
+        return self
+
+    def number(self):
+        self.format.type = FormatType.Number.value
+        return self
+
+
+class Formatter:
+    def __init__(self, format: Format, value):
+        self.format = format
+        self.value = value
+
+    def if_none_use_defaults(self):
+        defaults = self.format.defaults
+        if self.value is not None:
+            return self
+        if defaults is None:
+            return self
+
+        if isinstance(defaults, list):
+            self.value = defaults[0]
+        else:
+            self.value = defaults
+
+        return self
+
+    def cast_to_format(self):
+        if self.format.type == FormatType.Number.value:
+            self.value = float(self.value) if self.value is not None else None
+
+        if self.format.type == FormatType.Text.value:
+            # remove decimal point if it is 0
+            if isinstance(self.value, float):
+                self.value = str(self.value)
+                self.value = re.sub(r"\.0+$", "", self.value)
+
         return self

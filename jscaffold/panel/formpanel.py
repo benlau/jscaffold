@@ -23,7 +23,7 @@ class FormPanel:
         def __init__(self):
             self.instant_update = False
             self.title = None
-            self.action_label = "Confirm"
+            self.action_label = "Submit"
             self.save_changes = True
             self.runnables = []
             self.is_submitting = False

@@ -1,4 +1,6 @@
 import os
+
+from jscaffold.iounit.format import Formatter
 from .variable import Variable
 from ..contexts.context import Context
 
@@ -19,13 +21,15 @@ class EnvVar(Variable):
         return f"Env:{self.key}"
 
     def _write(self, value=None, context: Context = None):
-        validated_value = self.validate(value, self.format.defaults)
-        if validated_value is None:
+        value = (
+            Formatter(self.format, value).if_none_use_defaults().cast_to_format().value
+        )
+        if value is None:
             del os.environ[self.key]
         else:
-            os.environ[self.key] = validated_value
+            os.environ[self.key] = str(value)
         if context is not None and context.log is not None:
             context.log(f"Set {self.key}={self._format_display_value(value)}\n")
 
     def _read(self, context: Context = None):
-        return os.getenv(self.key)
+        return Formatter(self.format, os.getenv(self.key)).cast_to_format().value

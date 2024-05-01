@@ -74,6 +74,24 @@ class TestJsonFileVar(TestCase):
         var = JsonFileVar("C", "mock-file").path("A.B.C")
         assert var.value == "value"
 
+    @patch("builtins.open")
+    def test_jsonfilevar_read_number(self, mock_open):
+        json_str = '{"A": {"B": {"C": 1}}}'
+        mock_open.return_value.__enter__().read.return_value = json_str
+
+        var = JsonFileVar("C", "mock-file").path("A.B.C")
+        assert var.value == 1
+
+    @patch("builtins.open")
+    def test_jsonfilevar_write_number(self, mock_open):
+        json_str = '{"A": {"B": {"C": 1}}}'
+        mock_open.return_value.__enter__().read.return_value = json_str
+        var = JsonFileVar("C", "mock-file").path("A.B.C")
+        var.update(2)
+        mock_open.return_value.__enter__().write.assert_called_with(
+            '{"A": {"B": {"C": 2}}}'
+        )
+
     def test_source(self):
         with JsonFileVar.source("config.json", indent=7) as source:
             var1 = source.var("A")

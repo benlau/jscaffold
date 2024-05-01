@@ -28,9 +28,19 @@ class TestEnvVar(TestCase):
 
         assert os.getenv("var1", None) is None
 
+    def test_envvar_write_integer(self):
+        var = EnvVar("var1")
+        var.write(123)
+        assert os.getenv("var1") == "123"
+
     @patch("jscaffold.services.changedispatcher.change_dispatcher.dispatch")
     def test_envvar_write_should_dispatch_change(self, mock_dispatch):
         var = EnvVar("VAR")
         var.write("value")
 
         mock_dispatch.assert_called_once_with("Env:VAR", "value")
+
+    def test_envvar_read_integer(self):
+        os.environ["var1"] = "123"
+        var = EnvVar("var1").number()
+        assert var.value == 123

@@ -3,16 +3,26 @@ from jscaffold.iounit.format import Format
 from jscaffold.iounit.iounit import Inputable
 from jscaffold.services.tkservice import tk_serivce
 from ipywidgets import widgets
+from jscaffold.iounit.variable import Variable
 import tempfile
 import os
 from pathlib import Path
+
+
+def read_input(input: Inputable):
+    if isinstance(input, Variable):
+        return input.value
+    else:
+        return input.read()
 
 
 class InputWidgetType(Enum):
     Text = "text"
     Select = "select"
     Textarea = "textarea"
-    UploadFile = "upload_file"
+    FileUpload = "upload_file"
+    LocalPath = "local_path"
+    Number = "number"
 
 
 class InputWidget:
@@ -85,7 +95,7 @@ class TextInputWidget(InputWidget):
         if value is None:
             value = ""
         if self.text_widget.value != value:
-            self.text_widget.value = value
+            self.text_widget.value = str(value) if value is not None else ""
 
     def observe(self, func):
         self.text_widget.observe(func)
@@ -126,7 +136,7 @@ class TextAreaInputWidget(InputWidget):
         if value is None:
             value = ""
         if self.textarea.value != value:
-            self.textarea.value = value
+            self.textarea.value = str(value) if value is not None else ""
 
     def observe(self, func):
         return self.textarea.observe(func)
@@ -200,7 +210,7 @@ class FileUploadInputWidget(InputWidget):
         uploader.observe(on_upload_change, names="value")
 
         hbox = widgets.HBox([text_box, uploader], layout=widgets.Layout(width="360px"))
-        super().__init__(InputWidgetType.UploadFile.value, input, hbox)
+        super().__init__(InputWidgetType.FileUpload.value, input, hbox)
 
     @property
     def value(self):
@@ -208,7 +218,8 @@ class FileUploadInputWidget(InputWidget):
 
     @value.setter
     def value(self, value):
-        self.text_box.value = value
+        if self.text_box.value != value:
+            self.text_box.value = str(value) if value is not None else ""
 
     def observe(self, func):
         return self.text_box.observe(func)
@@ -241,7 +252,7 @@ class LocalPathInputWidget(InputWidget):
             [text_box, browse_button], layout=widgets.Layout(width="360px")
         )
         browse_button.on_click(on_click)
-        super().__init__(InputWidgetType.UploadFile.value, input, hbox)
+        super().__init__(InputWidgetType.LocalPath.value, input, hbox)
 
     @property
     def value(self):
@@ -249,7 +260,45 @@ class LocalPathInputWidget(InputWidget):
 
     @value.setter
     def value(self, value):
-        self.text_box.value = value
+        if self.text_box.value != value:
+            self.text_box.value = str(value) if value is not None else ""
 
     def observe(self, func):
         return self.text_box.observe(func)
+
+
+class NumberInputWidget(InputWidget):
+    def __init__(self, input: Inputable):
+        value = read_input(input)
+        placeholder = input.get_defaults()
+        if placeholder is None:
+            placeholder = ""
+        format = input.format
+        layout = widgets.Layout(width="360px")
+
+        float_text = widgets.FloatText(
+            value=value,
+            plreaceholder=placeholder,
+            layout=layout,
+            disabled=format.readonly,
+        )
+
+        self.float_text = float_text
+        super().__init__(InputWidgetType.Textarea.value, input, float_text)
+
+    def update_widget(self):
+        super().update_widget()
+        format = self.input.format
+        self.float_text.disabled = format.readonly
+
+    @property
+    def value(self):
+        return self.float_text.value
+
+    @value.setter
+    def value(self, value):
+        if value is not None and self.float_text.value != value:
+            self.float_text.value = float(value)
+
+    def observe(self, func):
+        return self.float_text.observe(func)

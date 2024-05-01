@@ -100,6 +100,20 @@ class TestProcessor(IsolatedAsyncioTestCase):
 
         assert message.split("\n")[0] == "Traceback (most recent call last):"
 
+    @pytest.mark.asyncio()
+    async def test_processor_raise_exception_should_stop(self):
+        def stop():
+            raise Exception("Error")
+
+        callback = MagicMock()
+        context = MagicMock()
+        processor = Processor(context)
+        await processor(None, [stop, callback], context)
+        message = context.log.call_args[0][0]
+
+        assert message.split("\n")[0] == "Traceback (most recent call last):"
+        assert callback.call_count == 0
+
     @pytest.mark.asyncio
     async def test_processor_add_apply_to_source(self):
         """

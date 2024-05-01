@@ -6,17 +6,10 @@ from jscaffold.widgets.inputwidget import (
     FileUploadInputWidget,
     TextAreaInputWidget,
     TextInputWidget,
+    NumberInputWidget,
+    InputWidgetType,
 )
 from ..iounit.iounit import Inputable
-from enum import Enum
-
-
-class InputWidgetType(Enum):
-    Text = "text"
-    Select = "select"
-    Textarea = "textarea"
-    FileUpload = "file_upload"
-    LocalPath = "local_path"
 
 
 class WidgetWrapper:
@@ -85,7 +78,9 @@ class WidgetFactory:
         if not hasattr(input, "format"):
             return InputWidgetType.Text
         format = input.format
-        if (
+        if format.type == FormatType.Number.value:
+            return InputWidgetType.Number
+        elif (
             format.type == FormatType.File.value
             and format.file_source == FileSource.Upload.value
         ):
@@ -106,7 +101,9 @@ class WidgetFactory:
     def create_input(self, input: Inputable):
         input_widget_type = self.get_input_widget_type(input)
 
-        if input_widget_type == InputWidgetType.Select:
+        if input_widget_type == InputWidgetType.Number:
+            return NumberInputWidget(input)
+        elif input_widget_type == InputWidgetType.Select:
             return SelectInputWidget(input)
         elif input_widget_type == InputWidgetType.Textarea:
             return TextAreaInputWidget(input)

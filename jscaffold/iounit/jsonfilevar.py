@@ -1,11 +1,11 @@
 from jscaffold.patchers.dict import PatchDict
-from .variable import Variable
+from .valuable import Valuable
 from contextlib import contextmanager
 from collections import OrderedDict
 import json
 
 
-class JsonFileVar(Variable):
+class JsonFileVar(Valuable):
     class State:
         def __init__(self):
             self.key = None

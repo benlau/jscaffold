@@ -1,10 +1,10 @@
-from jscaffold.iounit.sharedstoragevar import SharedStorageVar
+from jscaffold.iounit.var import Var
 from jscaffold.utils import inspect_arg_name
 
 
 def _normalize_input(input):
     if isinstance(input, str):
-        return SharedStorageVar(input)
+        return Var(input)
     return input
 
 

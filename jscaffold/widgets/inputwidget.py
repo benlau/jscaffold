@@ -3,14 +3,14 @@ from jscaffold.iounit.format import Format
 from jscaffold.iounit.iounit import Inputable
 from jscaffold.services.tkservice import tk_serivce
 from ipywidgets import widgets
-from jscaffold.iounit.variable import Variable
+from jscaffold.iounit.valuable import Valuable
 import tempfile
 import os
 from pathlib import Path
 
 
 def read_input(input: Inputable):
-    if isinstance(input, Variable):
+    if isinstance(input, Valuable):
         return input.value
     else:
         return input.read()

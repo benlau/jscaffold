@@ -1,11 +1,11 @@
 import os
 
 from jscaffold.iounit.format import Formatter
-from .variable import Variable
+from .valuable import Valuable
 from ..contexts.context import Context
 
 
-class EnvVar(Variable):
+class EnvVar(Valuable):
     """
     Wrapper for environment variable
     """

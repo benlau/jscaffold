@@ -1,6 +1,6 @@
 from unittest import TestCase
 from jscaffold.form import form
-from jscaffold.iounit.sharedstoragevar import SharedStorageVar
+from jscaffold.iounit.var import Var
 
 
 class TestForm(TestCase):
@@ -10,4 +10,4 @@ class TestForm(TestCase):
         """
         created_form = form("VAR")
         assert created_form is not None
-        assert isinstance(created_form.input[0], SharedStorageVar) is True
+        assert isinstance(created_form.input[0], Var) is True

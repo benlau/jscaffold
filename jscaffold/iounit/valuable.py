@@ -5,7 +5,7 @@ from .format import Format, Formattable, Formatter
 import copy
 
 
-class Variable(IOAble, Formattable):
+class Valuable(IOAble, Formattable):
     def __init__(self):
         self.format = Format()
         self._has_cached_value = False

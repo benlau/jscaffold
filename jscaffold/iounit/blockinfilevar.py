@@ -1,34 +1,37 @@
 from contextlib import contextmanager
-from jscaffold.patchers.assign import PatchAssignment
-from .valuable import Valuable
+from jscaffold.iounit.valuable import Valuable
+from jscaffold.patchers.block import PatchBlock
 
 
-class EnvFileVar(Valuable):
+class BlockInFileVar(Valuable):
     default_filename = None
 
     def __init__(self, key, filename=None):
         super().__init__()
-
+        self.filename = filename
         if filename is not None:
             self.filename = filename
-        elif EnvFileVar.default_filename is not None:
-            self.filename = EnvFileVar.default_filename
+        elif BlockInFileVar.default_filename is not None:
+            self.filename = BlockInFileVar.default_filename
         else:
             raise ValueError("filename is not provided")
+
         self._key = key
-        self.patcher = PatchAssignment()
+        if isinstance(key, str):
+            self.patcher = PatchBlock(key, key)
+        else:
+            self.patcher = PatchBlock(key[0], key[1])
+        self.content = None
 
     def _get_key(self):
         return self._key
 
     def _get_id(self):
-        return f"EnvFile:{self.filename}:{self.key}"
+        return f"BlockInFile:{self.filename}:{self.key}"
 
     def _write(self, value, context=None):
         content = self._read_file_content()
-        replaced, _ = self.patcher(
-            content if content is not None else "", self.key, value
-        )
+        replaced = self.patcher.write(content if content is not None else "", value)
 
         file = open(self.filename, "w")
         file.write(replaced)
@@ -44,7 +47,7 @@ class EnvFileVar(Valuable):
         if content is None:
             return None
 
-        _, value = self.patcher(content, self.key)
+        value = self.patcher.read(content, self.key)
         return value
 
     def _read_file_content(self):
@@ -61,7 +64,7 @@ class EnvFileVar(Valuable):
     @contextmanager
     def use(cls, filename: str):
         try:
-            EnvFileVar.default_filename = filename
+            BlockInFileVar.default_filename = filename
             yield
         finally:
-            EnvFileVar.default_filename = None
+            BlockInFileVar.default_filename = None

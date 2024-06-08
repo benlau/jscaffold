@@ -1,4 +1,3 @@
-from contextlib import contextmanager
 from contextvars import Context
 from .iounit import IOAble
 from .format import Format, Formattable, Formatter
@@ -38,20 +37,3 @@ class Valuable(IOAble, Formattable):
         if not self._has_cached_value:
             self.refresh()
         return self._cached_value
-
-
-class SourceMixin:
-    @classmethod
-    @contextmanager
-    def source(cls, filename: str):
-        class Source:
-            def __init__(self):
-                self.filename = filename
-
-            def __call__(self, key):
-                return self.var(key)
-
-            def var(self, key):
-                return cls(key, self.filename)
-
-        yield Source()

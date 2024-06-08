@@ -92,12 +92,15 @@ class TestJsonFileVar(TestCase):
             '{"A": {"B": {"C": 2}}}'
         )
 
-    def test_source(self):
-        with JsonFileVar.source("config.json", indent=7) as source:
-            var1 = source.var("A")
+    def test_use(self):
+        with JsonFileVar.use("config.json", indent=7):
+            var1 = JsonFileVar("A")
             assert var1.filename == "config.json"
             assert var1.state.indent == 7
 
-            var2 = source("B")
+            var2 = JsonFileVar("B")
             assert var2.filename == "config.json"
             assert var2.state.indent == 7
+
+        assert JsonFileVar.default_filename is None
+        assert JsonFileVar.default_indent is None

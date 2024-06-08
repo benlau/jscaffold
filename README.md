@@ -37,7 +37,7 @@ By using different forms repeatedly, an application can be built for various pur
 from jscaffold import form, EnvFileVar, JsonFileVar
 env = EnvFileVar("ENV", ".env").select("dev", "staging", "prod")
 version = JsonFileVar("version", "package.json").indent(4)
-form([env, version])
+form(env, version)
 ```
 
 ![image](https://github.com/benlau/jscaffold/assets/82716/cf425d02-93ce-4f39-911c-f4561bcbb859)
@@ -76,7 +76,7 @@ The `form` function serves as a shortcut for creating a FormPanel based on input
 
 It accepts a list of Inputable objects (e.g., EnvVar, EnvFileVar, JsonFileVar), which can be passed directly as arguments or wrapped in a list.
 
-If a string is passed, it will automatically be converted to a SharedVar.
+If a string is passed, it will automatically be converted to a [Var](#var).
 
 Remarks: You should use `form` to create FormPanel instead of creating a FormPanel directly.
 
@@ -88,7 +88,7 @@ var1 = EnvVar("VAR1")
 var2 = EnvVar("VAR2")
 form(var1,var2)
 form([var,var2])
-form("VAR3") # It will be replaced by a `SharedVar` automatically.
+form("VAR3") # It is equivalent to form(Var("VAR3"))
 ```
 ### FormPanel.title(title:str)
 
@@ -179,7 +179,7 @@ var.update("dev") # Set "ENV" to dev
 ## JsonFileVar
 
 This class provides a wrapper for read/write a field inside a JSON file.
-It implemented the `Formattable` and `Valuable` interfaces.
+It implemented the [Formattable](#formattable) and [Valuable](#valuable) interfaces.
 
 The constructor:
 
@@ -235,4 +235,13 @@ with JsonFileVar.source("data.json", indent=4) as src:
     json_var1 = src.var("version")
     json_var2 = src.var("name")
 ```
+
+## Var
+
+A Var object represents a variable that is stored in shared storage and is capable of reading and writing values. It inherits from the Valuable base class.
+
+### Var.init(key, shared_storage: SharedStorage = shared_storage)
+
+Initialize a `Var` instance.
+
 

@@ -163,3 +163,6 @@ playground/**/*.ipynb
 .vscode
 
 .DS_Store
+
+docs/*.env
+docs/*.json

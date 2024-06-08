@@ -59,7 +59,7 @@ class PatchAssignment:
         self.comment = comment
         self.rest_of_line = rest_of_line
 
-    def parse(self, content, pattern) -> Tuple[str, str]:
+    def parse(self, content: str, pattern) -> Tuple[str, str]:
         match = pattern.match(content)
         if match is None:
             raise ValueError("Invalid format")
@@ -68,7 +68,7 @@ class PatchAssignment:
         return extracted, remaining
 
     def __call__(
-        self, content, variable, replacement: Optional[str] = None
+        self, content: str, variable, replacement: Optional[str] = None
     ) -> Tuple[str, Optional[str]]:
         remaining = content
         ret = ""

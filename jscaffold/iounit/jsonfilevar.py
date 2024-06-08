@@ -6,6 +6,9 @@ import json
 
 
 class JsonFileVar(Valuable):
+    default_filename = None
+    default_indent = None
+
     class State:
         def __init__(self):
             self.key = None
@@ -13,13 +16,20 @@ class JsonFileVar(Valuable):
             self.reader = None
             self.path = None
 
-    def __init__(self, key, filename):
+    def __init__(self, key, filename=None):
         super().__init__()
-        self.filename = filename
+        if filename is not None:
+            self.filename = filename
+        elif JsonFileVar.default_filename is not None:
+            self.filename = JsonFileVar.default_filename
+        else:
+            raise ValueError("filename is not provided")
+
         self.patcher = PatchDict()
         self.state = JsonFileVar.State()
         self.state.path = key
         self.state.key = key
+        self.state.indent = JsonFileVar.default_indent
 
     def indent(self, indent):
         self.state.indent = indent
@@ -80,18 +90,11 @@ class JsonFileVar(Valuable):
 
     @classmethod
     @contextmanager
-    def source(cls, filename: str, indent=None):
-        class Source:
-            def __init__(self):
-                self.filename = filename
-                self.indent = indent
-
-            def __call__(self, key):
-                return self.var(key)
-
-            def var(self, key):
-                ret = cls(key, self.filename)
-                ret.state.indent = self.indent
-                return ret
-
-        yield Source()
+    def use(cls, filename: str, indent=None):
+        try:
+            JsonFileVar.default_filename = filename
+            JsonFileVar.default_indent = indent
+            yield
+        finally:
+            JsonFileVar.default_filename = None
+            JsonFileVar.default_indent = None

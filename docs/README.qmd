@@ -1,0 +1,15 @@
+JScaffold
+=========
+
+JScaffold is a library for quickly building user interfaces in Jupyter to manipulate configuration from differnt sources (e.g .env, json) and run shell script or callback.
+
+Here is an example:
+
+```{python}
+from jscaffold import form, EnvFileVar, JsonFileVar
+env = EnvFileVar("ENV", ".env").select("dev", "staging", "prod")
+version = JsonFileVar("version", "package.json").indent(4)
+form(env, version)
+```
+
+It read the `ENV` variable from .env and the `version` field in package.json. Press `submit` will save the changes. 

@@ -5,3 +5,4 @@ from .jsonfilevar import *
 from .applytosource import *
 from .format import *
 from .var import *
+from .blockinfilevar import *

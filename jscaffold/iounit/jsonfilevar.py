@@ -1,6 +1,5 @@
 from jscaffold.patchers.dict import PatchDict
 from .valuable import Valuable
-from contextlib import contextmanager
 from collections import OrderedDict
 import json
 
@@ -89,12 +88,27 @@ class JsonFileVar(Valuable):
             return None
 
     @classmethod
-    @contextmanager
-    def use(cls, filename: str, indent=None):
-        try:
-            JsonFileVar.default_filename = filename
-            JsonFileVar.default_indent = indent
-            yield
-        finally:
-            JsonFileVar.default_filename = None
-            JsonFileVar.default_indent = None
+    def use(cls, filename: str):
+        class JsonFileVarContext:
+            def __init__(self, filename):
+                self.prev_filename = None
+                self.prev_indent = None
+                self.current_filename = filename
+                self.current_indent = None
+
+            def __enter__(self):
+                self.prev_filename = JsonFileVar.default_filename
+                self.prev_indent = JsonFileVar.default_indent
+                JsonFileVar.default_filename = self.current_filename
+                JsonFileVar.default_indent = self.current_indent
+                return self
+
+            def __exit__(self, exc_type, exc_val, exc_tb):
+                JsonFileVar.default_filename = self.prev_filename
+                JsonFileVar.default_indent = self.prev_indent
+
+            def indent(self, indent):
+                self.current_indent = indent
+                return self
+
+        return JsonFileVarContext(filename)

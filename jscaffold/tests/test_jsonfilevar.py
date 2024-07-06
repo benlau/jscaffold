@@ -93,14 +93,42 @@ class TestJsonFileVar(TestCase):
         )
 
     def test_use(self):
-        with JsonFileVar.use("config.json", indent=7):
+        with JsonFileVar.use("config.json"):
             var1 = JsonFileVar("A")
             assert var1.filename == "config.json"
-            assert var1.state.indent == 7
+            assert var1.state.indent is None
 
             var2 = JsonFileVar("B")
             assert var2.filename == "config.json"
-            assert var2.state.indent == 7
+            assert var2.state.indent is None
 
         assert JsonFileVar.default_filename is None
         assert JsonFileVar.default_indent is None
+
+    def test_use_indent(self):
+        with JsonFileVar.use("config.json").indent(9):
+            var1 = JsonFileVar("A")
+            assert var1.filename == "config.json"
+            assert var1.state.indent == 9
+
+            var2 = JsonFileVar("B")
+            assert var2.filename == "config.json"
+            assert var2.state.indent == 9
+
+        assert JsonFileVar.default_filename is None
+        assert JsonFileVar.default_indent is None
+
+    def test_use_nested_indent(self):
+        with JsonFileVar.use("config.json").indent(9):
+            var1 = JsonFileVar("A")
+            assert var1.filename == "config.json"
+            assert var1.state.indent == 9
+
+            with JsonFileVar.use("config2.json").indent(10):
+                var2 = JsonFileVar("B")
+                assert var2.filename == "config2.json"
+                assert var2.state.indent == 10
+
+            var3 = JsonFileVar("A")
+            assert var3.filename == "config.json"
+            assert var3.state.indent == 9

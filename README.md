@@ -221,7 +221,7 @@ Example Usage:
 json_var.path("a.b.c")
 ```
 
-### JsonFileVar.source(filename: str, indent=None)
+### JsonFileVar.use(filename: str, indent=None)
 
 A context manager for creating `JsonFileVar` instances with a common source file and optional indentation.
 
@@ -231,9 +231,9 @@ A context manager for creating `JsonFileVar` instances with a common source file
 Example Usage:
 
 ```python
-with JsonFileVar.source("data.json", indent=4) as src:
-    json_var1 = src.var("version")
-    json_var2 = src.var("name")
+with JsonFileVar.use("data.json", indent=4):
+    json_var1 = JsonFileVar("version")
+    json_var2 = JsonFileVar("name")
 ```
 
 ## Var

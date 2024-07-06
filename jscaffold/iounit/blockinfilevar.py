@@ -47,7 +47,7 @@ class BlockInFileVar(Valuable):
         if content is None:
             return None
 
-        value = self.patcher.read(content, self.key)
+        value = self.patcher.read(content)
         return value
 
     def _read_file_content(self):

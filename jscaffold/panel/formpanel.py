@@ -10,6 +10,7 @@ from jscaffold.services.changedispatcher import (
     change_dispatcher,
 )
 from jscaffold.debounce import KeyFilterDebouncer
+from jscaffold.iounit.var import Var
 
 
 class FormPanel:
@@ -38,6 +39,9 @@ class FormPanel:
             self.input = []
         else:
             self.input = input if isinstance(input, list) else [input]
+            self.input = list(
+                map(lambda x: Var(x) if isinstance(x, str) else x, self.input)
+            )
 
         self.widget = None
         self.state = FormPanel.State()

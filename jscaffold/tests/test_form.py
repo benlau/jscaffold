@@ -11,3 +11,6 @@ class TestForm(TestCase):
         created_form = form("VAR")
         assert created_form is not None
         assert isinstance(created_form.input[0], Var) is True
+
+    def test_nested_form(self):
+        form("VAR1").form("VAR2")

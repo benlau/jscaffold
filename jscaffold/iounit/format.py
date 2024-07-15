@@ -1,7 +1,9 @@
 from enum import Enum
 from typing import Any, List, Optional, Union
 import re
+from jscaffold.iounit.iounit import Inputable
 from jscaffold.utils import args_to_list
+from jscaffold.services.changedispatcher import change_dispatcher
 
 
 class FormatType(Enum):
@@ -54,11 +56,16 @@ class Format:
         self.mkdir = mkdir
 
 
-class Formattable:
+class Formatable:
     def _format_display_value(self, value):
         if self.format.password is True:
             return "*********"
         return value if value is not None else ""
+
+    def _dispatch_format_changed(self, payload: dict):
+        if isinstance(self, Inputable):
+            object_id = self._get_id()
+            change_dispatcher.dispatch(object_id, payload)
 
     def defaults(self, value):
         self.format.defaults = value
@@ -86,6 +93,9 @@ class Formattable:
         *args: Optional[List[str]],
     ):
         self.format.select = args_to_list(args, defaults=None)
+        self._dispatch_format_changed(
+            {"type": "format_changed", "field": "select", "value": self.format.select}
+        )
         return self
 
     def upload_file(self, folder: str = None, mkdir: bool = False):
@@ -103,18 +113,30 @@ class Formattable:
 
     def readonly(self, value=True):
         self.format.readonly = value
+        self._dispatch_format_changed(
+            {"type": "format_changed", "field": "read_only", "value": value}
+        )
         return self
 
     def password(self, value=True):
         self.format.password = value
+        self._dispatch_format_changed(
+            {"type": "format_changed", "field": "password", "value": value}
+        )
         return self
 
     def desc(self, value):
         self.format.desc = value
+        self._dispatch_format_changed(
+            {"type": "format_changed", "field": "read_only", "value": value}
+        )
         return self
 
     def number(self):
         self.format.type = FormatType.Number.value
+        self._dispatch_format_changed(
+            {"type": "format_changed", "field": "number", "value": None}
+        )
         return self
 
 

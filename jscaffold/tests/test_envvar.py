@@ -38,7 +38,9 @@ class TestEnvVar(TestCase):
         var = EnvVar("VAR")
         var.write("value")
 
-        mock_dispatch.assert_called_once_with("Env:VAR", "value")
+        mock_dispatch.assert_called_once_with(
+            "Env:VAR", {"type": "value_changed", "value": "value"}
+        )
 
     def test_envvar_read_integer(self):
         os.environ["var1"] = "123"

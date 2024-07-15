@@ -48,7 +48,8 @@ class Outputable(ABC):
         ret = self._write(value, context=context)
         if isinstance(self, Inputable):
             object_id = self._get_id()
-            change_dispatcher.dispatch(object_id, value)
+            payload = {"type": "value_changed", "value": value}
+            change_dispatcher.dispatch(object_id, payload)
         return ret
 
     def _write(self, value=None, context: Context = None):

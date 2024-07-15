@@ -27,7 +27,7 @@ class TestWidgetFactory(TestCase):
         input_widget = factory.create_input(var)
         assert input_widget.type == "upload_file"
 
-    def test_widgetfactory_create_non_Formattable_input(self):
+    def test_widgetfactory_create_non_Formatable_input(self):
         class DummyInput(Inputable):
             def _read(self, context=None):
                 return "dummy"

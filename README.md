@@ -51,7 +51,7 @@ file = EnvVar("FILE").local_path()
 script = '''
 wc -l $FILE
 '''
-form(file, script).title("Count line")
+form(file).title("Count line").run(script)
 ```
 
 - [ ] Run requests example
@@ -157,7 +157,7 @@ form().instant_update(True)
 ## EnvVar
 
 This class provides a wrapper for read/write environment variable. 
-It implemented the `Formattable` and `Valuable` interfaces.
+It implemented the `Formatable` and `Valuable` interfaces.
 
 The constructor:
 
@@ -179,7 +179,7 @@ var.update("dev") # Set "ENV" to dev
 ## JsonFileVar
 
 This class provides a wrapper for read/write a field inside a JSON file.
-It implemented the [Formattable](#formattable) and [Valuable](#valuable) interfaces.
+It implemented the [Formatable](#Formatable) and [Valuable](#valuable) interfaces.
 
 The constructor:
 

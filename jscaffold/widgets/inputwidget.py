@@ -175,7 +175,10 @@ class SelectInputWidget(InputWidget):
     def update_widget(self):
         super().update_widget()
         self.select_widget.disabled = self.format.readonly
+        orig_value = self.select_widget.value
         self.select_widget.options = self.format.select
+        if orig_value in self.format.select:
+            self.select_widget.value = orig_value
 
 
 class FileUploadInputWidget(InputWidget):

@@ -117,14 +117,20 @@ class FormPanel:
             ):
                 self.submit()
 
+        # pylama:ignore=C901
         def create_listener(id, widget):
-            def on_change(value):
-                try:
-                    if widget.value != value:
-                        widget.value = value
-                except Exception as e:
-                    self.context.log(str(e))
-                    raise e
+            def on_change(payload):
+                value = payload["value"]
+                type = payload["type"]
+                if type == "value_changed":
+                    try:
+                        if widget.value != value:
+                            widget.value = value
+                    except Exception as e:
+                        self.context.log(str(e))
+                        raise e
+                if type == "format_changed":
+                    widget.update_widget()
 
             listener = Listener(id, on_change)
             return listener

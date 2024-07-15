@@ -12,7 +12,13 @@ class ChangeDispatcher:
         self.listeners.add(listener)
 
     def dispatch(self, key, payload):
-        self.debouncer(key, self._invoke_listeners, key, payload)
+        payload_type = (
+            payload["type"] if payload is not None and "type" in payload else None
+        )
+
+        debounce_key = f"{key}:{payload_type}" if payload_type is not None else key
+
+        self.debouncer(debounce_key, self._invoke_listeners, key, payload)
 
     def _invoke_listeners(self, key, payload):
         pending_remove_list = []

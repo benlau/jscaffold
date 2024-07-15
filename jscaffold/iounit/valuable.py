@@ -1,10 +1,10 @@
 from contextvars import Context
 from .iounit import IOAble
-from .format import Format, Formattable, Formatter
+from .format import Format, Formatable, Formatter
 import copy
 
 
-class Valuable(IOAble, Formattable):
+class Valuable(IOAble, Formatable):
     def __init__(self):
         self.format = Format()
         self._has_cached_value = False

@@ -4,12 +4,14 @@ from jscaffold.services.sharedstorage import shared_storage
 class Context:
     def __init__(
         self,
+        main_panel=None,
         shared_storage=shared_storage,
         log_view=None,
     ):
         # Shared storage between input and output
         self.shared_storage = shared_storage
         self.log_view = log_view
+        self.main_panel = main_panel
 
     def to_kwargs(self):
         return {
@@ -42,6 +44,7 @@ class FormContext(Context):
         return FormContext(
             log_view=base_context.log_view,
             shared_storage=base_context.shared_storage,
+            main_panel=base_context.main_panel,
             parent=base_context,
             **kwargs
         )

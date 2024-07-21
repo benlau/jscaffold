@@ -1,0 +1,22 @@
+# form() function tests
+
+# Single form
+
+```{python}
+from jscaffold import form
+
+form("var1")
+```
+
+- It should show `var1`
+- No title
+- No desc
+- It should show log view
+
+# Nested forms
+
+```{python}
+from jscaffold import form
+
+form("var1").form("var2")
+```

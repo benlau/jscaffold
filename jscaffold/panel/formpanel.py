@@ -179,7 +179,13 @@ class FormPanel:
         return ""
 
     def show(self):
-        display(self.widget)
+        main_panel = (
+            self.context.main_panel if self.context.main_panel is not None else None
+        )
+        print(main_panel)
+        root_widget = main_panel.widget if main_panel is not None else self.widget
+        print(root_widget)
+        display(root_widget)
         self.focus()
         return self
 
@@ -221,6 +227,7 @@ class FormPanel:
             self.widget.children = [new_form.widget]
             return new_form
 
+        # Chain the form if necessary
         last_children = self.widget.children[-1]
         if isinstance(last_children, LogViewWidget):
             self.widget.children = tuple(

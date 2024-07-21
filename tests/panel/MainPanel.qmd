@@ -1,0 +1,30 @@
+# MainPanl
+
+# Empty Panel
+```{python}
+from jscaffold.panel.mainpanel import MainPanel
+main_panel = MainPanel()
+main_panel.widget
+```
+
+- It will show an empty panel
+
+# Append Form
+
+```{python}
+from jscaffold.panel.mainpanel import MainPanel
+from jscaffold import form
+main_panel = MainPanel()
+main_panel.form("var1")
+main_panel.widget
+```
+
+# Nested Form
+
+```{python}
+from jscaffold.panel.mainpanel import MainPanel
+from jscaffold import form
+main_panel = MainPanel()
+main_panel.form("var1").form("var2")
+main_panel.widget
+```

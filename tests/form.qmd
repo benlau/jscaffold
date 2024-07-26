@@ -20,3 +20,15 @@ from jscaffold import form
 
 form("var1").form("var2")
 ```
+
+# Run function
+
+```{python}
+from jscaffold import form
+
+def run(log, var1):
+    log(f"Hello world {var1}\n")
+    log("--- Jscaffold ---\n")
+
+form("var1").run(run)
+```

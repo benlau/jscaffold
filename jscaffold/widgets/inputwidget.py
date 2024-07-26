@@ -8,6 +8,8 @@ import tempfile
 import os
 from pathlib import Path
 
+from jscaffold.widgets.ipywidgetwrapper import IPYWidgetWrapper
+
 
 def read_input(input: Inputable):
     if isinstance(input, Valuable):
@@ -25,7 +27,7 @@ class InputWidgetType(Enum):
     Number = "number"
 
 
-class InputWidget:
+class InputWidget(IPYWidgetWrapper):
     def __init__(self, type, input, child):
         self.type = type
         self.input = input
@@ -36,16 +38,15 @@ class InputWidget:
         self.widget = widgets.VBox([child, self.desc_html])
         self.update_widget()
 
-    def focus(self):
-        if self.widget is not None:
-            self.widget.focus()
-
     def update_widget(self):
         format = self.input.format if hasattr(self.input, "format") else Format()
         desc = format.desc
         if desc is not None:
             self.desc_html.value = desc
         self.desc_html.layout.visibility = "visible" if desc else "hidden"
+
+    def get_widget(self):
+        return self.widget
 
     @property
     def value(self):

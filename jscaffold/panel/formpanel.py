@@ -1,4 +1,5 @@
 from jscaffold.utils import args_to_list
+from jscaffold.widgets.ipywidgetwrapper import IPYWidgetWrapper
 from ..contexts.context import FormContext
 from IPython.display import display
 from jscaffold.views.logview.logview import LogViewWidget
@@ -13,7 +14,7 @@ from jscaffold.debounce import KeyFilterDebouncer
 from jscaffold.iounit.var import Var
 
 
-class FormPanel:
+class FormPanel(IPYWidgetWrapper):
     class State:
         """
         The State object hold the properties
@@ -108,6 +109,9 @@ class FormPanel:
         self.widget = widgets.VBox(items)
         self.listen()
 
+    def get_widget(self):
+        return self.widget
+
     def listen(self):
         def on_user_change(change):
             if (
@@ -182,9 +186,7 @@ class FormPanel:
         main_panel = (
             self.context.main_panel if self.context.main_panel is not None else None
         )
-        print(main_panel)
         root_widget = main_panel.widget if main_panel is not None else self.widget
-        print(root_widget)
         display(root_widget)
         self.focus()
         return self

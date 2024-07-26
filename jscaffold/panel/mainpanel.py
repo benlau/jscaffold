@@ -1,11 +1,12 @@
 from jscaffold.panel.formpanel import FormPanel
 from jscaffold.utils import args_to_list
 from jscaffold.views.logview.logview import LogViewWidget
+from jscaffold.widgets.ipywidgetwrapper import IPYWidgetWrapper
 from ..contexts.context import Context
 from ipywidgets import widgets
 
 
-class MainPanel:
+class MainPanel(IPYWidgetWrapper):
     class State:
         def __init__(self):
             self.forms = []
@@ -22,6 +23,9 @@ class MainPanel:
 
     def update_widget(self):
         self.form_box.children = [form.widget for form in self.state.forms]
+
+    def get_widget(self):
+        return self.widget
 
     def form(self, *args):
         input = args_to_list(args, defaults=[])

@@ -8,6 +8,7 @@ class LogViewWidget(anywidget.AnyWidget):
     _css = pathlib.Path(__file__).parent / "style.css"
 
     value = traitlets.Unicode("").tag(sync=True)
+    is_running = traitlets.Bool(False).tag(sync=True)
 
     def append_stdout(self, *args):
         message = " ".join(str(arg) for arg in args)

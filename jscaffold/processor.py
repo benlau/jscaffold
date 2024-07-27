@@ -16,9 +16,11 @@ class Processor:
     async def __call__(self, input, runnables, value):
         return await self.process(input, runnables, value)
 
+    # pylama:ignore=C901
     async def process(self, input, runnables, value):
-        if self.context is not None:
-            self.context.clear_log()
+        context = self.context
+        if context is not None:
+            context.clear_log()
 
         runnables = [runnables] if not isinstance(runnables, list) else runnables[:]
 
@@ -42,6 +44,9 @@ class Processor:
             ]
         )
 
+        if context is not None:
+            context.on_start_processing()
+
         for target in runnables:
             try:
                 if isinstance(target, str):
@@ -56,6 +61,9 @@ class Processor:
                     self.context.log(traceback.format_exc())
                 # Stop processing if an error occurs
                 break
+
+        if context is not None:
+            context.on_stop_processing()
 
     def create_task(self, input, output, value):
         async def run():

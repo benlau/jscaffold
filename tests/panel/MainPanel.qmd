@@ -28,3 +28,19 @@ main_panel = MainPanel()
 main_panel.form("var1").form("var2")
 main_panel.widget
 ```
+
+# Runtime
+
+```{python}
+from jscaffold.panel.mainpanel import MainPanel
+from jscaffold import form
+import time
+
+def run(log):
+    log("Sleep 5s")
+    time.sleep(5)
+    log("Wake up")
+main_panel = MainPanel()
+main_panel.form("var1").run(run)
+main_panel.widget
+```

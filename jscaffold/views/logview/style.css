@@ -39,3 +39,8 @@
     user-select: none;
     background-color: white;
 };
+
+.jscaffold-logview-status-bar {
+    height: 18px;
+    width: 100%;
+}

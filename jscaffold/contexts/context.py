@@ -30,6 +30,14 @@ class Context:
         if self.log_view is not None:
             self.log_view.clear_output()
 
+    def on_start_processing(self):
+        if self.log_view is not None:
+            self.log_view.is_running = True
+
+    def on_stop_processing(self):
+        if self.log_view is not None:
+            self.log_view.is_running = False
+
 
 class FormContext(Context):
     def __init__(self, input=None, save_changes=True, parent=None, form=None, **kwargs):

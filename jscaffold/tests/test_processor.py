@@ -3,6 +3,7 @@ import uuid
 from jscaffold.contexts.context import FormContext
 from jscaffold.iounit.envfilevar import EnvFileVar
 from jscaffold.iounit.envvar import EnvVar
+from jscaffold.iounit.valuable import Valuable
 from jscaffold.processor import Processor
 from unittest.mock import MagicMock, Mock, patch
 import asyncio
@@ -13,6 +14,9 @@ import os
 
 @patch("jscaffold.services.changedispatcher.ChangeDispatcher.dispatch", Mock())
 class TestProcessor(IsolatedAsyncioTestCase):
+    def setUp(self):
+        Valuable.shared_storage = {}
+
     @pytest.mark.asyncio()
     async def test_processor_execute_list(self):
         callback = MagicMock()

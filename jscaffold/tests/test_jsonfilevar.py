@@ -5,6 +5,8 @@ from tempfile import NamedTemporaryFile
 import json
 import textwrap
 
+from jscaffold.iounit.valuable import Valuable
+
 
 def write_to_tmp(dict):
     tmp_file = NamedTemporaryFile(delete=False)
@@ -16,6 +18,9 @@ def write_to_tmp(dict):
 
 @patch("jscaffold.services.changedispatcher.ChangeDispatcher.dispatch", Mock())
 class TestJsonFileVar(TestCase):
+    def setUp(self):
+        Valuable.shared_storage = {}
+
     def test_jsonfilevar_get_id(self):
         variable = JsonFileVar("A", "./config.json")
         assert variable.id == "JsonFile:./config.json:A"
